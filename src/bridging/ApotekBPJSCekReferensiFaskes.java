@@ -350,9 +350,9 @@ public final class ApotekBPJSCekReferensiFaskes extends javax.swing.JDialog {
                 });
                 response = mapper.readTree(api.Decrypt(root.path("response").asText(),utc));
                 //response = root.path("response");
-                if(response.path("list").isArray()){
+                if(response.path("faskes").isArray()){
                     i=1;
-                    for(JsonNode list:response.path("list")){
+                    for(JsonNode list:response.path("faskes")){
                         tabMode.addRow(new Object[]{
                             i+".",list.path("kode").asText(),
                             list.path("nama").asText()
@@ -384,7 +384,7 @@ public final class ApotekBPJSCekReferensiFaskes extends javax.swing.JDialog {
             URL = link+"/referensi/ppk/2/"+faskes;	
             root = mapper.readTree(api.getRest().exchange(URL, HttpMethod.GET, requestEntity, String.class).getBody());
             nameNode = root.path("metaData");
-            if(nameNode.path("code").asText().equals("200")){ 
+            if(nameNode.path("message").asText().equals("Sukses")){ 
                 tabMode.addRow(new Object[]{
                     "","",""
                 });
@@ -393,9 +393,9 @@ public final class ApotekBPJSCekReferensiFaskes extends javax.swing.JDialog {
                 });
                 response = mapper.readTree(api.Decrypt(root.path("response").asText(),utc));
                 //response = root.path("response");
-                if(response.path("list").isArray()){
+                if(response.path("faskes").isArray()){
                     i=1;
-                    for(JsonNode list:response.path("list")){
+                    for(JsonNode list:response.path("faskes")){
                         tabMode.addRow(new Object[]{
                             i+".",list.path("kode").asText(),
                             list.path("nama").asText()

@@ -44,6 +44,7 @@ public final class DlgCariPerusahaan extends javax.swing.JDialog {
     private ResultSet rs;
     private File file;
     private FileWriter fileWriter;
+    private String iyem;
     private ObjectMapper mapper = new ObjectMapper();
     private JsonNode root;
     private JsonNode response;
@@ -384,13 +385,13 @@ public final class DlgCariPerusahaan extends javax.swing.JDialog {
             file=new File("./cache/perusahaan.iyem");
             file.createNewFile();
             fileWriter = new FileWriter(file);
-            StringBuilder iyembuilder = new StringBuilder();
+            iyem="";
             ps=koneksi.prepareStatement("select kode_perusahaan,nama_perusahaan,alamat,kota,no_telp from perusahaan_pasien order by nama_perusahaan");
             try{           
                 rs=ps.executeQuery();
                 while(rs.next()){
                     tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5)});
-                    iyembuilder.append("{\"Kode\":\"").append(rs.getString(1)).append("\",\"NamaInstansi\":\"").append(rs.getString(2)).append("\",\"AlamatInstansi\":\"").append(rs.getString(3)).append("\",\"Kota\":\"").append(rs.getString(4)).append("\",\"NoTelp\":\"").append(rs.getString(5)).append("\"},");
+                    iyem=iyem+"{\"Kode\":\""+rs.getString(1)+"\",\"NamaInstansi\":\""+rs.getString(2)+"\",\"AlamatInstansi\":\""+rs.getString(3)+"\",\"Kota\":\""+rs.getString(4)+"\",\"NoTelp\":\""+rs.getString(5)+"\"},";
                 }
             }catch(Exception e){
                 System.out.println("Notifikasi : "+e);
@@ -404,14 +405,10 @@ public final class DlgCariPerusahaan extends javax.swing.JDialog {
                 }
             }
 
-            if (iyembuilder.length() > 0) {
-                iyembuilder.setLength(iyembuilder.length() - 1);
-                fileWriter.write("{\"perusahaan\":["+iyembuilder+"]}");
-                fileWriter.flush();
-            }
-            
+            fileWriter.write("{\"perusahaan\":["+iyem.substring(0,iyem.length()-1)+"]}");
+            fileWriter.flush();
             fileWriter.close();
-            iyembuilder=null;
+            iyem=null;
         } catch (Exception e) {
             System.out.println("Notifikasi : "+e);
         }
@@ -437,29 +434,17 @@ public final class DlgCariPerusahaan extends javax.swing.JDialog {
             Valid.tabelKosong(tabMode);
             response = root.path("perusahaan");
             if(response.isArray()){
-                if(TCari.getText().trim().equals("")){
-                    for(JsonNode list:response){
+                for(JsonNode list:response){
+                    if(list.path("Kode").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("NamaInstansi").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("Kota").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
                         tabMode.addRow(new Object[]{
                             list.path("Kode").asText(),list.path("NamaInstansi").asText(),list.path("AlamatInstansi").asText(),list.path("Kota").asText(),list.path("NoTelp").asText()
                         });
-                    }
-                }else{
-                    for(JsonNode list:response){
-                        if(list.path("Kode").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("NamaInstansi").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("Kota").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
-                            tabMode.addRow(new Object[]{
-                                list.path("Kode").asText(),list.path("NamaInstansi").asText(),list.path("AlamatInstansi").asText(),list.path("Kota").asText(),list.path("NoTelp").asText()
-                            });
-                        }
                     }
                 }
             }
             myObj.close();
         } catch (Exception ex) {
-            if(ex.toString().contains("java.io.FileNotFoundException")){
-                tampil();
-            }else{
-                System.out.println("Notifikasi : "+ex);
-            }
+            System.out.println("Notifikasi : "+ex);
         }
         LCount.setText(""+tabMode.getRowCount());
     } 

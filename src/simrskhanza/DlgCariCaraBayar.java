@@ -48,6 +48,7 @@ public final class DlgCariCaraBayar extends javax.swing.JDialog {
     private ResultSet rs;
     private File file;
     private FileWriter fileWriter;
+    private String iyem;
     private ObjectMapper mapper = new ObjectMapper();
     private JsonNode root;
     private JsonNode response;
@@ -172,9 +173,6 @@ public final class DlgCariCaraBayar extends javax.swing.JDialog {
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
-            }
-            public void windowOpened(java.awt.event.WindowEvent evt) {
-                formWindowOpened(evt);
             }
         });
 
@@ -461,17 +459,6 @@ public final class DlgCariCaraBayar extends javax.swing.JDialog {
         panggilPhoto();
     }//GEN-LAST:event_BtnRefreshPhotoActionPerformed
 
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        try {
-            if(Valid.daysOld("./cache/penjab.iyem")<30){
-                tampil2();
-            }else{
-                tampil();
-            }
-        } catch (Exception e) {
-        }
-    }//GEN-LAST:event_formWindowOpened
-
     /**
     * @param args the command line arguments
     */
@@ -517,14 +504,14 @@ public final class DlgCariCaraBayar extends javax.swing.JDialog {
             file=new File("./cache/penjab.iyem");
             file.createNewFile();
             fileWriter = new FileWriter(file);
-            StringBuilder iyembuilder = new StringBuilder();
+            iyem="";
             ps=koneksi.prepareStatement("select * from penjab where penjab.status='1' order by penjab.png_jawab");
             try{           
                 rs=ps.executeQuery();
                 i=1;
                 while(rs.next()){
                     tabMode.addRow(new Object[]{i,rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6)});
-                    iyembuilder.append("{\"KodeAsuransi\":\"").append(rs.getString(1)).append("\",\"NamaAsuransi\":\"").append(rs.getString(2)).append("\",\"PerusahaanAsuransi\":\"").append(rs.getString(3)).append("\",\"AlamatAsuransi\":\"").append(rs.getString(4)).append("\",\"NoTelp\":\"").append(rs.getString(5)).append("\",\"Attn\":\"").append(rs.getString(6)).append("\"},");
+                    iyem=iyem+"{\"KodeAsuransi\":\""+rs.getString(1)+"\",\"NamaAsuransi\":\""+rs.getString(2)+"\",\"PerusahaanAsuransi\":\""+rs.getString(3)+"\",\"AlamatAsuransi\":\""+rs.getString(4)+"\",\"NoTelp\":\""+rs.getString(5)+"\",\"Attn\":\""+rs.getString(6)+"\"},";
                     i++;
                 }
             }catch(Exception e){
@@ -539,14 +526,10 @@ public final class DlgCariCaraBayar extends javax.swing.JDialog {
                 }
             }
 
-            if (iyembuilder.length() > 0) {
-                iyembuilder.setLength(iyembuilder.length() - 1);
-                fileWriter.write("{\"penjab\":["+iyembuilder+"]}");
-                fileWriter.flush();
-            }
-            
+            fileWriter.write("{\"penjab\":["+iyem.substring(0,iyem.length()-1)+"]}");
+            fileWriter.flush();
             fileWriter.close();
-            iyembuilder=null;
+            iyem=null;
         } catch (Exception e) {
             System.out.println("Notifikasi : "+e);
         }
@@ -572,23 +555,13 @@ public final class DlgCariCaraBayar extends javax.swing.JDialog {
             Valid.tabelKosong(tabMode);
             response = root.path("penjab");
             if(response.isArray()){
-                if(TCari.getText().trim().equals("")){
-                    i=1;
-                    for(JsonNode list:response){
+                i=1;
+                for(JsonNode list:response){
+                    if(list.path("KodeAsuransi").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("NamaAsuransi").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
                         tabMode.addRow(new Object[]{
                             i,list.path("KodeAsuransi").asText(),list.path("NamaAsuransi").asText(),list.path("PerusahaanAsuransi").asText(),list.path("AlamatAsuransi").asText(),list.path("NoTelp").asText(),list.path("Attn").asText()
                         });
                         i++;
-                    }
-                }else{
-                    i=1;
-                    for(JsonNode list:response){
-                        if(list.path("KodeAsuransi").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("NamaAsuransi").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
-                            tabMode.addRow(new Object[]{
-                                i,list.path("KodeAsuransi").asText(),list.path("NamaAsuransi").asText(),list.path("PerusahaanAsuransi").asText(),list.path("AlamatAsuransi").asText(),list.path("NoTelp").asText(),list.path("Attn").asText()
-                            });
-                            i++;
-                        }
                     }
                 }
             }

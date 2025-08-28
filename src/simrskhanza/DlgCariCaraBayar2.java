@@ -588,13 +588,13 @@ public final class DlgCariCaraBayar2 extends javax.swing.JDialog {
             file=new File("./cache/penjab.iyem");
             file.createNewFile();
             fileWriter = new FileWriter(file);
-            StringBuilder iyembuilder = new StringBuilder();
+            iyem="";
             ps=koneksi.prepareStatement("select * from penjab where penjab.status='1' order by penjab.png_jawab");
             try{           
                 rs=ps.executeQuery();
                 while(rs.next()){
                     tabMode.addRow(new Object[]{false,rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6)});
-                    iyembuilder.append("{\"KodeAsuransi\":\"").append(rs.getString(1)).append("\",\"NamaAsuransi\":\"").append(rs.getString(2)).append("\",\"PerusahaanAsuransi\":\"").append(rs.getString(3)).append("\",\"AlamatAsuransi\":\"").append(rs.getString(4)).append("\",\"NoTelp\":\"").append(rs.getString(5)).append("\",\"Attn\":\"").append(rs.getString(6)).append("\"},");
+                    iyem=iyem+"{\"KodeAsuransi\":\""+rs.getString(1)+"\",\"NamaAsuransi\":\""+rs.getString(2)+"\",\"PerusahaanAsuransi\":\""+rs.getString(3)+"\",\"AlamatAsuransi\":\""+rs.getString(4)+"\",\"NoTelp\":\""+rs.getString(5)+"\",\"Attn\":\""+rs.getString(6)+"\"},";
                 }
             }catch(Exception e){
                 System.out.println("Notifikasi : "+e);
@@ -608,14 +608,10 @@ public final class DlgCariCaraBayar2 extends javax.swing.JDialog {
                 }
             }
 
-            if (iyembuilder.length() > 0) {
-                iyembuilder.setLength(iyembuilder.length() - 1);
-                fileWriter.write("{\"penjab\":["+iyembuilder+"]}");
-                fileWriter.flush();
-            }
-            
+            fileWriter.write("{\"penjab\":["+iyem.substring(0,iyem.length()-1)+"]}");
+            fileWriter.flush();
             fileWriter.close();
-            iyembuilder=null;
+            iyem=null;
         } catch (Exception e) {
             System.out.println("Notifikasi : "+e);
         }
@@ -681,23 +677,13 @@ public final class DlgCariCaraBayar2 extends javax.swing.JDialog {
             root = mapper.readTree(myObj);
             response = root.path("penjab");
             if(response.isArray()){
-                if(TCari.getText().trim().equals("")){
-                    i=1;
-                    for(JsonNode list:response){
+                i=1;
+                for(JsonNode list:response){
+                    if(list.path("KodeAsuransi").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("NamaAsuransi").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
                         tabMode.addRow(new Object[]{
                             false,list.path("KodeAsuransi").asText(),list.path("NamaAsuransi").asText(),list.path("PerusahaanAsuransi").asText(),list.path("AlamatAsuransi").asText(),list.path("NoTelp").asText(),list.path("Attn").asText()
                         });
                         i++;
-                    }
-                }else{
-                    i=1;
-                    for(JsonNode list:response){
-                        if(list.path("KodeAsuransi").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("NamaAsuransi").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
-                            tabMode.addRow(new Object[]{
-                                false,list.path("KodeAsuransi").asText(),list.path("NamaAsuransi").asText(),list.path("PerusahaanAsuransi").asText(),list.path("AlamatAsuransi").asText(),list.path("NoTelp").asText(),list.path("Attn").asText()
-                            });
-                            i++;
-                        }
                     }
                 }
             }

@@ -44,6 +44,7 @@ public final class DlgCariMetodeRacik extends javax.swing.JDialog {
     private Connection koneksi=koneksiDB.condb();
     private File file;
     private FileWriter fileWriter;
+    private String iyem;
     private ObjectMapper mapper = new ObjectMapper();
     private JsonNode root;
     private JsonNode response;
@@ -384,14 +385,15 @@ public final class DlgCariMetodeRacik extends javax.swing.JDialog {
             file=new File("./cache/metoderacik.iyem");
             file.createNewFile();
             fileWriter = new FileWriter(file);
-            StringBuilder iyembuilder = new StringBuilder();
+            iyem="";
+            
             i=1;
             ps=koneksi.prepareStatement("select * from metode_racik order by metode_racik.nm_racik ");
             try {
                 rs=ps.executeQuery();
                 while(rs.next()){
-                    tabMode.addRow(new Object[]{i+"",rs.getString(1),rs.getString(2)});
-                    iyembuilder.append("{\"KodeRacik\":\"").append(rs.getString(1)).append("\",\"NamaRacik\":\"").append(rs.getString(2)).append("\"},");
+                    tabMode.addRow(new String[]{i+"",rs.getString(1),rs.getString(2)});
+                    iyem=iyem+"{\"KodeRacik\":\""+rs.getString(1)+"\",\"NamaRacik\":\""+rs.getString(2)+"\"},";
                     i++;
                 }
             } catch (Exception e) {
@@ -404,15 +406,11 @@ public final class DlgCariMetodeRacik extends javax.swing.JDialog {
                     ps.close();
                 }
             }   
-            
-            if (iyembuilder.length() > 0) {
-                iyembuilder.setLength(iyembuilder.length() - 1);
-                fileWriter.write("{\"metoderacik\":["+iyembuilder+"]}");
-                fileWriter.flush();
-            }
-            
+                
+            fileWriter.write("{\"metoderacik\":["+iyem.substring(0,iyem.length()-1)+"]}");
+            fileWriter.flush();
             fileWriter.close();
-            iyembuilder=null;
+            iyem=null;
         }catch(Exception e){
             System.out.println("Notifikasi : "+e);
         }
@@ -427,31 +425,18 @@ public final class DlgCariMetodeRacik extends javax.swing.JDialog {
             response = root.path("metoderacik");
             i=1;
             if(response.isArray()){
-                if(TCari.getText().trim().equals("")){
-                    for(JsonNode list:response){
+                for(JsonNode list:response){
+                    if(list.path("NamaRacik").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
                         tabMode.addRow(new Object[]{
                             i+"",list.path("KodeRacik").asText(),list.path("NamaRacik").asText()
                         });
                         i++;
                     }
-                }else{
-                    for(JsonNode list:response){
-                        if(list.path("NamaRacik").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
-                            tabMode.addRow(new Object[]{
-                                i+"",list.path("KodeRacik").asText(),list.path("NamaRacik").asText()
-                            });
-                            i++;
-                        }
-                    }
                 }
             }
             myObj.close();
         } catch (Exception ex) {
-            if(ex.toString().contains("java.io.FileNotFoundException")){
-                tampil();
-            }else{
-                System.out.println("Notifikasi : "+ex);
-            }
+            System.out.println("Notifikasi : "+ex);
         }
         LCount.setText(""+tabMode.getRowCount());
     }

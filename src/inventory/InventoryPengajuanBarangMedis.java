@@ -46,6 +46,7 @@ public class InventoryPengajuanBarangMedis extends javax.swing.JDialog {
     private boolean sukses=true;
     private File file;
     private FileWriter fileWriter;
+    private String iyem;
     private ObjectMapper mapper = new ObjectMapper();
     private JsonNode root;
     private JsonNode response;
@@ -923,7 +924,7 @@ private void btnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             file=new File("./cache/pengajuanobat.iyem");
             file.createNewFile();
             fileWriter = new FileWriter(file);
-            StringBuilder iyembuilder = new StringBuilder();
+            iyem="";
             ps=koneksi.prepareStatement(
                 "select databarang.kode_brng,databarang.nama_brng,databarang.kode_satbesar,databarang.kode_sat,jenis.nama,"+
                 "kategori_barang.nama as kategori,golongan_barang.nama as golongan,(databarang.h_beli*databarang.isi) as h_beli,databarang.isi "+
@@ -935,7 +936,7 @@ private void btnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             try {
                 rs=ps.executeQuery();
                 while(rs.next()){
-                    iyembuilder.append("{\"SatPengajuan\":\"").append(rs.getString("kode_satbesar")).append("\",\"KodeBarang\":\"").append(rs.getString("kode_brng")).append("\",\"NamaBarang\":\"").append(rs.getString("nama_brng").replaceAll("\"","")).append("\",\"Satuan\":\"").append(rs.getString("kode_sat")).append("\",\"JenisObat\":\"").append(rs.getString("nama")).append("\",\"Kategori\":\"").append(rs.getString("kategori")).append("\",\"Golongan\":\"").append(rs.getString("golongan")).append("\",\"HPengajuan\":\"").append(rs.getString("h_beli")).append("\",\"Isi\":\"").append(rs.getString("isi")).append("\"},");
+                    iyem=iyem+"{\"SatPengajuan\":\""+rs.getString("kode_satbesar")+"\",\"KodeBarang\":\""+rs.getString("kode_brng")+"\",\"NamaBarang\":\""+rs.getString("nama_brng").replaceAll("\"","")+"\",\"Satuan\":\""+rs.getString("kode_sat")+"\",\"JenisObat\":\""+rs.getString("nama")+"\",\"Kategori\":\""+rs.getString("kategori")+"\",\"Golongan\":\""+rs.getString("golongan")+"\",\"HPengajuan\":\""+rs.getString("h_beli")+"\",\"Isi\":\""+rs.getString("isi")+"\"},";
                 } 
             } catch (Exception e) {
                 System.out.println("Notifikasi : "+e);
@@ -947,15 +948,10 @@ private void btnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
                     ps.close();
                 }
             } 
-            
-            if (iyembuilder.length() > 0) {
-                iyembuilder.setLength(iyembuilder.length() - 1);
-                fileWriter.write("{\"pengajuanobat\":["+iyembuilder+"]}");
-                fileWriter.flush();
-            }
-            
+            fileWriter.write("{\"pengajuanobat\":["+iyem.substring(0,iyem.length()-1)+"]}");
+            fileWriter.flush();
             fileWriter.close();
-            iyembuilder=null;
+            iyem=null; 
         }catch(Exception e){
             System.out.println("Notifikasi : "+e);
         }
@@ -972,15 +968,25 @@ private void btnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
                 }
             }
 
+            kodebarang=null;
             kodebarang=new String[jml];
+            namabarang=null;
             namabarang=new String[jml];
+            satuan=null;
             satuan=new String[jml];
+            satuanbesar=null;
             satuanbesar=new String[jml];
+            jumlah=null;
             jumlah=new String[jml];
+            jenis=null;
             jenis=new String[jml];
+            kategori=null;
             kategori=new String[jml];
+            golongan=null;
             golongan=new String[jml];
+            harga=null;
             harga=new Double[jml];
+            subtotal=null;
             subtotal=new Double[jml];
             jumlah2=new Double[jml];
             isi=new Double[jml];
@@ -1010,39 +1016,17 @@ private void btnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
                 tabMode.addRow(new Object[]{jumlah[i],satuanbesar[i],kodebarang[i],namabarang[i],satuan[i],jenis[i],kategori[i],golongan[i],harga[i],subtotal[i],jumlah2[i],isi[i],isibesar[i]});
             }
             
-            kodebarang=null;
-            namabarang=null;
-            satuan=null;
-            satuanbesar=null;
-            jumlah=null;
-            jenis=null;
-            kategori=null;
-            golongan=null;
-            harga=null;
-            subtotal=null;
-            jumlah2=null;
-            isi=null;
-            isibesar=null;
-            
             myObj = new FileReader("./cache/pengajuanobat.iyem");
             root = mapper.readTree(myObj);
             response = root.path("pengajuanobat");
             if(response.isArray()){
-                if(TCari.getText().trim().equals("")){
-                    for(JsonNode list:response){
+                for(JsonNode list:response){
+                    if(list.path("KodeBarang").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("NamaBarang").asText().toLowerCase().contains(TCari.getText().toLowerCase())||
+                            list.path("JenisObat").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("Kategori").asText().toLowerCase().contains(TCari.getText().toLowerCase())||
+                            list.path("Golongan").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
                         tabMode.addRow(new Object[]{
                             "",list.path("SatPengajuan").asText(),list.path("KodeBarang").asText(),list.path("NamaBarang").asText(),list.path("Satuan").asText(),list.path("JenisObat").asText(),list.path("Kategori").asText(),list.path("Golongan").asText(),list.path("HPengajuan").asDouble(),0,0,list.path("Isi").asDouble(),1
                         });
-                    }
-                }else{
-                    for(JsonNode list:response){
-                        if(list.path("KodeBarang").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("NamaBarang").asText().toLowerCase().contains(TCari.getText().toLowerCase())||
-                                list.path("JenisObat").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("Kategori").asText().toLowerCase().contains(TCari.getText().toLowerCase())||
-                                list.path("Golongan").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
-                            tabMode.addRow(new Object[]{
-                                "",list.path("SatPengajuan").asText(),list.path("KodeBarang").asText(),list.path("NamaBarang").asText(),list.path("Satuan").asText(),list.path("JenisObat").asText(),list.path("Kategori").asText(),list.path("Golongan").asText(),list.path("HPengajuan").asDouble(),0,0,list.path("Isi").asDouble(),1
-                            });
-                        }
                     }
                 }
             }

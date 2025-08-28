@@ -1181,13 +1181,13 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 rs=ps.executeQuery();
                 ttl=0;
                 while(rs.next()){     
-                    tabMode.addRow(new Object[]{
+                    tabMode.addRow(new String[]{
                         rs.getString("no_keluar"),rs.getString("tanggal"),
                         rs.getString("keterangan"),
                         rs.getString("kd_bangsal")+", "+rs.getString("nm_bangsal"),
                         rs.getString("nip")+", "+rs.getString("nama"),"","",""
                     });
-                    tabMode.addRow(new Object[]{
+                    tabMode.addRow(new String[]{
                         "","No.Batch & Faktur","Barang","Jenis","Satuan","Harga","Jml","Total"
                     });
                     ps2=koneksi.prepareStatement(
@@ -1208,17 +1208,17 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         while(rs2.next()){
                             subttl=subttl+rs2.getDouble("total");
                             ttl=ttl+rs2.getDouble("total");
-                            tabMode.addRow(new Object[]{
+                            tabMode.addRow(new String[]{
                                 "",no+". B "+rs2.getString("no_batch")+", F "+rs2.getString("no_faktur"),rs2.getString("kode_brng")+", "+rs2.getString("nama_brng"),
                                 rs2.getString("nama"),rs2.getString("kode_sat"),df2.format(rs2.getDouble("harga_beli")),
                                 df2.format(rs2.getDouble("jumlah")),df2.format(rs2.getDouble("total"))
                             });
                             no++;
                         }   
-                        tabMode.addRow(new Object[]{
+                        tabMode.addRow(new String[]{
                             "","Sub Total :","","","","","",df2.format(subttl)
                         }); 
-                        tabMode.addRow(new Object[]{
+                        tabMode.addRow(new String[]{
                             "","","","","","","",""
                         }); 
                     } catch (Exception e) {
@@ -1296,7 +1296,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 rs=ps.executeQuery();
                 ttl=0;
                 while(rs.next()){     
-                    tabMode2.addRow(new Object[]{
+                    tabMode2.addRow(new String[]{
                         rs.getString("no_keluar"),rs.getString("tanggal"),rs.getString("keterangan"),
                         rs.getString("kd_bangsal")+", "+rs.getString("nm_bangsal"),rs.getString("nip")+", "+rs.getString("nama"),
                         rs.getString("kode_brng"),rs.getString("nama_brng"),rs.getString("namajenis"),rs.getString("kode_sat"),
@@ -1380,15 +1380,9 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                   }
                   if(sukses==true){
                      Sequel.queryu("delete from tampjurnal");
-                     if(Sequel.menyimpantf2("tampjurnal","?,?,?,?",4,new String[]{Sequel.cariIsi("select Stok_Keluar_Medis from set_akun"),"PERSEDIAAN BARANG",Sequel.cariIsi("select sum(total) from detail_pengeluaran_obat_bhp where no_keluar='"+rs.getString("no_keluar")+"'"),"0"})==false){
-                        sukses=false;
-                     }
-                     if(Sequel.menyimpantf2("tampjurnal","?,?,?,?",4,new String[]{Sequel.cariIsi("select Kontra_Stok_Keluar_Medis from set_akun"),"KONTRA PERSEDIAAN BARANG","0",Sequel.cariIsi("select sum(total) from detail_pengeluaran_obat_bhp where no_keluar='"+rs.getString("no_keluar")+"'")})==false){
-                        sukses=false;
-                     } 
-                     if(sukses==true){
-                        sukses=jur.simpanJurnal(rs.getString("no_keluar"),"U","PEMBATALAN STOK KELUAR BARANG MEDIS/OBAT/ALKES/BHP"+", OLEH "+akses.getkode());
-                     }  
+                     Sequel.menyimpan("tampjurnal","?,?,?,?",4,new String[]{Sequel.cariIsi("select Stok_Keluar_Medis from set_akun"),"PERSEDIAAN BARANG",Sequel.cariIsi("select sum(total) from detail_pengeluaran_obat_bhp where no_keluar='"+rs.getString("no_keluar")+"'"),"0"});
+                     Sequel.menyimpan("tampjurnal","?,?,?,?",4,new String[]{Sequel.cariIsi("select Kontra_Stok_Keluar_Medis from set_akun"),"KONTRA PERSEDIAAN BARANG","0",Sequel.cariIsi("select sum(total) from detail_pengeluaran_obat_bhp where no_keluar='"+rs.getString("no_keluar")+"'")}); 
+                     sukses=jur.simpanJurnal(rs.getString("no_keluar"),"U","PEMBATALAN STOK KELUAR BARANG MEDIS/OBAT/ALKES/BHP"+", OLEH "+akses.getkode());  
                   } 
               }    
               if(sukses==true){

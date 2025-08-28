@@ -47,7 +47,8 @@ public class DlgPermintaanStokPasien extends javax.swing.JDialog {
     private ResultSet rstampil;
     private WarnaTable2 warna=new WarnaTable2();
     public DlgCariDokter dokter=new DlgCariDokter(null,false);
-    private double ttl=0,y=0,ppnobat=0,kenaikan=0;
+    public DlgCariAturanPakai aturanpakaiobat=new DlgCariAturanPakai(null,false);
+    private double ttl=0,y=0,ppnobat=0,stokobat,kenaikan=0;
     private int jml=0,i=0,index=0;
     private String norawatibu,tampilkan_ppnobat_ranap="",aktifkanbatch="no",kelas="",bangsal="",kamar="",hppfarmasi="";
     private String[] keranap,kodebarang,namabarang,kategori,satuan,aturanpakai;
@@ -198,6 +199,28 @@ public class DlgPermintaanStokPasien extends javax.swing.JDialog {
                 }
             });
         }       
+        
+        aturanpakaiobat.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {}
+            @Override
+            public void windowClosing(WindowEvent e) {}
+            @Override
+            public void windowClosed(WindowEvent e) {
+                if(aturanpakaiobat.getTable().getSelectedRow()!= -1){  
+                    tbDokter.setValueAt(aturanpakaiobat.getTable().getValueAt(aturanpakaiobat.getTable().getSelectedRow(),0).toString(),tbDokter.getSelectedRow(),10);
+                }   
+                tbDokter.requestFocus();
+            }
+            @Override
+            public void windowIconified(WindowEvent e) {}
+            @Override
+            public void windowDeiconified(WindowEvent e) {}
+            @Override
+            public void windowActivated(WindowEvent e) {}
+            @Override
+            public void windowDeactivated(WindowEvent e) {}
+        });
         
         dokter.addWindowListener(new WindowListener() {
             @Override
@@ -882,28 +905,6 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
             }else if(evt.getKeyCode()==KeyEvent.VK_RIGHT){
                 i=tbDokter.getSelectedColumn();
                 if(i==10){
-                    DlgCariAturanPakai aturanpakaiobat=new DlgCariAturanPakai(null,false);
-                    aturanpakaiobat.addWindowListener(new WindowListener() {
-                        @Override
-                        public void windowOpened(WindowEvent e) {}
-                        @Override
-                        public void windowClosing(WindowEvent e) {}
-                        @Override
-                        public void windowClosed(WindowEvent e) {
-                            if(aturanpakaiobat.getTable().getSelectedRow()!= -1){  
-                                tbDokter.setValueAt(aturanpakaiobat.getTable().getValueAt(aturanpakaiobat.getTable().getSelectedRow(),0).toString(),tbDokter.getSelectedRow(),10);
-                            }   
-                            tbDokter.requestFocus();
-                        }
-                        @Override
-                        public void windowIconified(WindowEvent e) {}
-                        @Override
-                        public void windowDeiconified(WindowEvent e) {}
-                        @Override
-                        public void windowActivated(WindowEvent e) {}
-                        @Override
-                        public void windowDeactivated(WindowEvent e) {}
-                    });
                     aturanpakaiobat.setSize(internalFrame1.getWidth()-20,internalFrame1.getHeight()-20);
                     aturanpakaiobat.setLocationRelativeTo(internalFrame1);
                     aturanpakaiobat.setVisible(true);
@@ -1435,12 +1436,12 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
             kelas=Sequel.cariIsi(
                 "select kamar.kelas from kamar inner join kamar_inap "+
                 "on kamar.kd_kamar=kamar_inap.kd_kamar where no_rawat=? "+
-                "and kamar_inap.stts_pulang='-' order by STR_TO_DATE(concat(kamar_inap.tgl_masuk,' ',kamar_inap.jam_masuk),'%Y-%m-%d %H:%i:%s') desc limit 1",norawatibu);
+                "and stts_pulang='-' order by STR_TO_DATE(concat(kamar_inap.tgl_masuk,' ',jam_masuk),'%Y-%m-%d %H:%i:%s') desc limit 1",norawatibu);
         }else{
             kelas=Sequel.cariIsi(
                 "select kamar.kelas from kamar inner join kamar_inap "+
                 "on kamar.kd_kamar=kamar_inap.kd_kamar where no_rawat=? "+
-                "and kamar_inap.stts_pulang='-' order by STR_TO_DATE(concat(kamar_inap.tgl_masuk,' ',kamar_inap.jam_masuk),'%Y-%m-%d %H:%i:%s') desc limit 1",TNoRw.getText());
+                "and stts_pulang='-' order by STR_TO_DATE(concat(kamar_inap.tgl_masuk,' ',jam_masuk),'%Y-%m-%d %H:%i:%s') desc limit 1",TNoRw.getText());
         }                
         if(kelas.equals("Kelas 1")){
             Jeniskelas.setSelectedItem("Kelas 1");

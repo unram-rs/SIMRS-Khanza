@@ -44,6 +44,7 @@ public final class DlgCariJenis extends javax.swing.JDialog {
     private Connection koneksi=koneksiDB.condb();
     private File file;
     private FileWriter fileWriter;
+    private String iyem;
     private ObjectMapper mapper = new ObjectMapper();
     private JsonNode root;
     private JsonNode response;
@@ -381,13 +382,14 @@ public final class DlgCariJenis extends javax.swing.JDialog {
             file=new File("./cache/jenisobat.iyem");
             file.createNewFile();
             fileWriter = new FileWriter(file);
-            StringBuilder iyembuilder = new StringBuilder();
+            iyem="";
+            
             ps=koneksi.prepareStatement("select * from jenis order by jenis.nama ");
             try {
                 rs=ps.executeQuery();
                 while(rs.next()){
-                    tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3)});
-                    iyembuilder.append("{\"KodeJenis\":\"").append(rs.getString(1)).append("\",\"NamaJenis\":\"").append(rs.getString(2)).append("\",\"Keterangan\":\"").append(rs.getString(3)).append("\"},");
+                    tabMode.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3)});
+                    iyem=iyem+"{\"KodeJenis\":\""+rs.getString(1)+"\",\"NamaJenis\":\""+rs.getString(2)+"\",\"Keterangan\":\""+rs.getString(3)+"\"},";
                 }
             } catch (Exception e) {
                 System.out.println(e);
@@ -399,15 +401,11 @@ public final class DlgCariJenis extends javax.swing.JDialog {
                     ps.close();
                 }
             }   
-               
-            if (iyembuilder.length() > 0) {
-                iyembuilder.setLength(iyembuilder.length() - 1);
-                fileWriter.write("{\"jenisobat\":["+iyembuilder+"]}");
-                fileWriter.flush();
-            }
-            
+                
+            fileWriter.write("{\"jenisobat\":["+iyem.substring(0,iyem.length()-1)+"]}");
+            fileWriter.flush();
             fileWriter.close();
-            iyembuilder=null;
+            iyem=null;
         }catch(Exception e){
             System.out.println("Notifikasi : "+e);
         }
@@ -421,29 +419,17 @@ public final class DlgCariJenis extends javax.swing.JDialog {
             Valid.tabelKosong(tabMode);
             response = root.path("jenisobat");
             if(response.isArray()){
-                if(TCari.getText().trim().equals("")){
-                    for(JsonNode list:response){
+                for(JsonNode list:response){
+                    if(list.path("NamaJenis").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
                         tabMode.addRow(new Object[]{
                             list.path("KodeJenis").asText(),list.path("NamaJenis").asText(),list.path("Keterangan").asText()
                         });
-                    }
-                }else{
-                    for(JsonNode list:response){
-                        if(list.path("NamaJenis").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
-                            tabMode.addRow(new Object[]{
-                                list.path("KodeJenis").asText(),list.path("NamaJenis").asText(),list.path("Keterangan").asText()
-                            });
-                        }
                     }
                 }
             }
             myObj.close();
         } catch (Exception ex) {
-            if(ex.toString().contains("java.io.FileNotFoundException")){
-                tampil();
-            }else{
-                System.out.println("Notifikasi : "+ex);
-            }
+            System.out.println("Notifikasi : "+ex);
         }
         LCount.setText(""+tabMode.getRowCount());
     }

@@ -559,7 +559,7 @@
                             </Property>
                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                               <StringArray count="1">
-                                <StringItem index="0" value="26-07-2025"/>
+                                <StringItem index="0" value="26-08-2023"/>
                               </StringArray>
                             </Property>
                             <Property name="displayFormat" type="java.lang.String" value="dd-MM-yyyy"/>
@@ -1206,7 +1206,7 @@
                             </Property>
                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                               <StringArray count="1">
-                                <StringItem index="0" value="26-07-2025"/>
+                                <StringItem index="0" value="26-08-2023"/>
                               </StringArray>
                             </Property>
                             <Property name="displayFormat" type="java.lang.String" value="dd-MM-yyyy"/>
@@ -1527,10 +1527,10 @@
                   <SubComponents>
                     <Component class="widget.Label" name="jLabel19">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Tanggal :"/>
+                        <Property name="text" type="java.lang.String" value="Tgl.Asuhan :"/>
                         <Property name="name" type="java.lang.String" value="jLabel19" noResource="true"/>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[60, 23]"/>
+                          <Dimension value="[70, 23]"/>
                         </Property>
                       </Properties>
                     </Component>
@@ -1541,7 +1541,7 @@
                         </Property>
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                           <StringArray count="1">
-                            <StringItem index="0" value="26-07-2025"/>
+                            <StringItem index="0" value="26-08-2023"/>
                           </StringArray>
                         </Property>
                         <Property name="displayFormat" type="java.lang.String" value="dd-MM-yyyy"/>
@@ -1569,7 +1569,7 @@
                         </Property>
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                           <StringArray count="1">
-                            <StringItem index="0" value="26-07-2025"/>
+                            <StringItem index="0" value="26-08-2023"/>
                           </StringArray>
                         </Property>
                         <Property name="displayFormat" type="java.lang.String" value="dd-MM-yyyy"/>
@@ -1593,7 +1593,7 @@
                       <Properties>
                         <Property name="name" type="java.lang.String" value="TCari" noResource="true"/>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[205, 23]"/>
+                          <Dimension value="[195, 23]"/>
                         </Property>
                       </Properties>
                       <Events>
@@ -1770,23 +1770,6 @@
                                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnRefreshPhoto1ActionPerformed"/>
                               </Events>
                             </Component>
-                            <Component class="widget.Button" name="BtnPrint1">
-                              <Properties>
-                                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                                  <Image iconType="3" name="/picture/item (copy).png"/>
-                                </Property>
-                                <Property name="mnemonic" type="int" value="84"/>
-                                <Property name="text" type="java.lang.String" value="Surat"/>
-                                <Property name="toolTipText" type="java.lang.String" value="Alt+T"/>
-                                <Property name="name" type="java.lang.String" value="BtnPrint1" noResource="true"/>
-                                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[100, 30]"/>
-                                </Property>
-                              </Properties>
-                              <Events>
-                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnPrint1ActionPerformed"/>
-                              </Events>
-                            </Component>
                           </SubComponents>
                         </Container>
                         <Container class="javax.swing.JTabbedPane" name="TabData">
@@ -1830,8 +1813,8 @@
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                                  <JTabbedPaneConstraints tabName="Bukti Pembuat Pernyataan">
-                                    <Property name="tabTitle" type="java.lang.String" value="Bukti Pembuat Pernyataan"/>
+                                  <JTabbedPaneConstraints tabName="Tanda Tangan Pembuat Pernyataan">
+                                    <Property name="tabTitle" type="java.lang.String" value="Tanda Tangan Pembuat Pernyataan"/>
                                   </JTabbedPaneConstraints>
                                 </Constraint>
                               </Constraints>
@@ -1865,8 +1848,8 @@
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                                  <JTabbedPaneConstraints tabName="Bukti Saksi I Keluarga">
-                                    <Property name="tabTitle" type="java.lang.String" value="Bukti Saksi I Keluarga"/>
+                                  <JTabbedPaneConstraints tabName="Tanda Tangan Saksi I Keluarga">
+                                    <Property name="tabTitle" type="java.lang.String" value="Tanda Tangan Saksi I Keluarga"/>
                                   </JTabbedPaneConstraints>
                                 </Constraint>
                               </Constraints>

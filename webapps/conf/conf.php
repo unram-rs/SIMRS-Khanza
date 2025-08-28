@@ -87,15 +87,6 @@
         $save=str_replace("='","",$save);
         $save=str_replace("=/","",$save);
         $save=str_replace("=","",$save);
-        $save=str_replace("password","",$save);
-        $save=str_replace("submit","",$save);
-        $save=str_replace("input","",$save);
-        $save=str_replace("meta","",$save);
-        $save=str_replace("md5","",$save);
-        $save=str_replace("pass","",$save);
-        $save=str_replace("SESSION","",$save);
-        $save=str_replace("login_shell","",$save);
-        $save=str_replace("value","",$save);
         return $save;
     }
     
@@ -139,15 +130,6 @@
         $save=str_replace("='","",$save);
         $save=str_replace("=/","",$save);
         $save=str_replace("=","",$save);
-        $save=str_replace("password","",$save);
-        $save=str_replace("submit","",$save);
-        $save=str_replace("input","",$save);
-        $save=str_replace("meta","",$save);
-        $save=str_replace("md5","",$save);
-        $save=str_replace("pass","",$save);
-        $save=str_replace("SESSION","",$save);
-        $save=str_replace("login_shell","",$save);
-        $save=str_replace("value","",$save);
         return $save;
     }
     
@@ -190,15 +172,6 @@
         $save=str_replace("='","",$save);
         $save=str_replace("=/","",$save);
         $save=str_replace("=","",$save);
-        $save=str_replace("password","",$save);
-        $save=str_replace("submit","",$save);
-        $save=str_replace("input","",$save);
-        $save=str_replace("meta","",$save);
-        $save=str_replace("md5","",$save);
-        $save=str_replace("pass","",$save);
-        $save=str_replace("SESSION","",$save);
-        $save=str_replace("login_shell","",$save);
-        $save=str_replace("value","",$save);
         return $save;
     }
     
@@ -247,15 +220,6 @@
             $save=str_replace("='","",$save);
             $save=str_replace("=/","",$save);
             $save=str_replace("=","",$save);
-            $save=str_replace("password","",$save);
-            $save=str_replace("submit","",$save);
-            $save=str_replace("input","",$save);
-            $save=str_replace("meta","",$save);
-            $save=str_replace("md5","",$save);
-            $save=str_replace("pass","",$save);
-            $save=str_replace("SESSION","",$save);
-            $save=str_replace("login_shell","",$save);
-            $save=str_replace("value","",$save);
         }
         return $save;
     }
@@ -304,15 +268,6 @@
             $save=str_replace("='","",$save);
             $save=str_replace("=/","",$save);
             $save=str_replace("=","",$save);
-            $save=str_replace("password","",$save);
-            $save=str_replace("submit","",$save);
-            $save=str_replace("input","",$save);
-            $save=str_replace("meta","",$save);
-            $save=str_replace("md5","",$save);
-            $save=str_replace("pass","",$save);
-            $save=str_replace("SESSION","",$save);
-            $save=str_replace("login_shell","",$save);
-            $save=str_replace("value","",$save);
         }
         return $save;
     }
@@ -358,71 +313,6 @@
             $save=str_replace("='","",$save);
             $save=str_replace("=/","",$save);
             $save=str_replace("=","",$save);
-            $save=str_replace("password","",$save);
-            $save=str_replace("submit","",$save);
-            $save=str_replace("input","",$save);
-            $save=str_replace("meta","",$save);
-            $save=str_replace("md5","",$save);
-            $save=str_replace("pass","",$save);
-            $save=str_replace("SESSION","",$save);
-            $save=str_replace("login_shell","",$save);
-            $save=str_replace("value","",$save);
-        }
-        return $save;
-    }
-    
-    function validTeks7($data,$panjang){
-        $save="";
-        if(strlen($data)>$panjang){
-            header('Location: https://www.google.com');
-        }else{
-            $save=str_replace("'","",$data);
-            $save=str_replace("\\","",$save);
-            $save=str_replace(";","",$save);
-            $save=str_replace("`","",$save);
-            $save=str_replace("--","",$save);
-            $save=str_replace("/*","",$save);
-            $save=str_replace("*/","",$save);
-            $save=str_replace("text/html","",$save);
-            $save=str_replace("<script>","",$save);
-            $save=str_replace("</script>","",$save);
-            $save=str_replace("<noscript>","",$save);
-            $save=str_replace("</noscript>","",$save);
-            $save=str_replace("<img","",$save);
-            $save=str_replace("document","",$save);
-            $save=str_replace(" from ","",$save);
-            $save=str_replace("concat","",$save);
-            $save=str_replace("union","",$save);
-            $save=str_replace("base64","",$save);
-            $save=str_replace("//","",$save);
-            $save=str_replace("*","",$save);
-            $save=str_replace("}","",$save);
-            $save=str_replace("$","",$save);
-            $save=str_replace("{","",$save);
-            $save=str_replace("@","",$save);
-            $save=str_replace("[","",$save);
-            $save=str_replace("]","",$save);
-            $save=str_replace("(","",$save);
-            $save=str_replace(")","",$save);
-            $save=str_replace("|","",$save);
-            $save=str_replace(",","",$save);
-            $save=str_replace(":","",$save);
-            $save=str_replace("+","",$save);
-            $save=str_replace("^","",$save);
-            $save=str_replace("#","",$save);
-            $save=str_replace("!","",$save);
-            $save=str_replace("='","",$save);
-            $save=str_replace("=/","",$save);
-            $save=str_replace("=","",$save);
-            $save=str_replace("password","",$save);
-            $save=str_replace("submit","",$save);
-            $save=str_replace("input","",$save);
-            $save=str_replace("meta","",$save);
-            $save=str_replace("md5","",$save);
-            $save=str_replace("pass","",$save);
-            $save=str_replace("SESSION","",$save);
-            $save=str_replace("login_shell","",$save);
-            $save=str_replace("value","",$save);
         }
         return $save;
     }
@@ -541,7 +431,7 @@
     function bukaquery($sql){    
         $konektor=bukakoneksi();
         $result=mysqli_query($konektor, $sql)
-        or die (mysqli_error($konektor)."Silahkan hubungi administrator..!");
+        or die (/*mysqli_error($konektor)*/"Silahkan hubungi administrator..!");
         mysqli_close($konektor);
         return $result;
     }
@@ -561,7 +451,7 @@
     function bukainput($sql){
         $konektor=bukakoneksi();
         $result=mysqli_query($konektor,$sql)
-        or die(mysqli_error()."<br/><font color=red><b>Gagal..!!</b>");
+        or die(/*mysqli_error().*/"<br/><font color=red><b>Gagal..!!</b>");
         mysqli_close($konektor);
         return $result;
     }
@@ -597,7 +487,7 @@
     }
      
     function InsertData2($tabelname,$attrib) {
-        $command = bukaquery("INSERT INTO ".$tabelname." VALUES (".$attrib.")");
+        $command = bukaquery2("INSERT INTO ".$tabelname." VALUES (".$attrib.")");
         return $command;
     }
      
@@ -646,10 +536,6 @@
 
     function JSRedirect($url){
          echo"<html><head><title></title><meta http-equiv='refresh' content='1;URL=$url'></head><body></body></html>";
-    }
-    
-    function JSRedirect2($url,$time){
-        echo"<html><head><title></title><meta http-equiv='refresh' content='$time;URL=$url'></head><body></body></html>";
     }
 
     function Zet($url){

@@ -44,6 +44,7 @@ public final class DlgCariBahasa extends javax.swing.JDialog {
     private ResultSet rs;
     private File file;
     private FileWriter fileWriter;
+    private String iyem;
     private ObjectMapper mapper = new ObjectMapper();
     private JsonNode root;
     private JsonNode response;
@@ -378,13 +379,13 @@ public final class DlgCariBahasa extends javax.swing.JDialog {
             file=new File("./cache/bahasa.iyem");
             file.createNewFile();
             fileWriter = new FileWriter(file);
-            StringBuilder iyembuilder = new StringBuilder();
+            iyem="";
             ps=koneksi.prepareStatement("select * from bahasa_pasien ");
             try{           
                 rs=ps.executeQuery();
                 while(rs.next()){
                     tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2)});
-                    iyembuilder.append("{\"ID\":\"").append(rs.getString(1)).append("\",\"Bahasa\":\"").append(rs.getString(2)).append("\"},");
+                    iyem=iyem+"{\"ID\":\""+rs.getString(1)+"\",\"Bahasa\":\""+rs.getString(2)+"\"},";
                 }
             }catch(Exception e){
                 System.out.println("Notifikasi : "+e);
@@ -398,14 +399,10 @@ public final class DlgCariBahasa extends javax.swing.JDialog {
                 }
             }
 
-            if (iyembuilder.length() > 0) {
-                iyembuilder.setLength(iyembuilder.length() - 1);
-                fileWriter.write("{\"bahasa\":["+iyembuilder+"]}");
-                fileWriter.flush();
-            }
-            
+            fileWriter.write("{\"bahasa\":["+iyem.substring(0,iyem.length()-1)+"]}");
+            fileWriter.flush();
             fileWriter.close();
-            iyembuilder=null;
+            iyem=null;
         } catch (Exception e) {
             System.out.println("Notifikasi : "+e);
         }
@@ -431,29 +428,17 @@ public final class DlgCariBahasa extends javax.swing.JDialog {
             Valid.tabelKosong(tabMode);
             response = root.path("bahasa");
             if(response.isArray()){
-                if(TCari.getText().trim().equals("")){
-                    for(JsonNode list:response){
+                for(JsonNode list:response){
+                    if(list.path("Bahasa").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
                         tabMode.addRow(new Object[]{
                             list.path("ID").asText(),list.path("Bahasa").asText()
                         });
-                    } 
-                }else{
-                    for(JsonNode list:response){
-                        if(list.path("Bahasa").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
-                            tabMode.addRow(new Object[]{
-                                list.path("ID").asText(),list.path("Bahasa").asText()
-                            });
-                        }
                     }
                 }
             }
             myObj.close();
         } catch (Exception ex) {
-            if(ex.toString().contains("java.io.FileNotFoundException")){
-                tampil();
-            }else{
-                System.out.println("Notifikasi : "+ex);
-            }
+            System.out.println("Notifikasi : "+ex);
         }
         LCount.setText(""+tabMode.getRowCount());
     } 

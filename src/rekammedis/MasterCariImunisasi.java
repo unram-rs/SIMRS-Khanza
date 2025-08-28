@@ -44,6 +44,7 @@ public final class MasterCariImunisasi extends javax.swing.JDialog {
     private ResultSet rs;
     private File file;
     private FileWriter fileWriter;
+    private String iyem;
     private ObjectMapper mapper = new ObjectMapper();
     private JsonNode root;
     private JsonNode response;
@@ -365,13 +366,13 @@ public final class MasterCariImunisasi extends javax.swing.JDialog {
             file=new File("./cache/master_imunisasi.iyem");
             file.createNewFile();
             fileWriter = new FileWriter(file);
-            StringBuilder iyembuilder = new StringBuilder();
+            iyem="";
             ps=koneksi.prepareStatement("select master_imunisasi.kode_imunisasi, master_imunisasi.nama_imunisasi from master_imunisasi order by master_imunisasi.nama_imunisasi");   
             try {
                 rs=ps.executeQuery();
                 while(rs.next()){
-                    tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2)});
-                    iyembuilder.append("{\"KodeImunisasi\":\"").append(rs.getString(1)).append("\",\"NamaImunisasi\":\"").append(rs.getString(2)).append("\"},");
+                    tabMode.addRow(new String[]{rs.getString(1),rs.getString(2)});
+                    iyem=iyem+"{\"KodeImunisasi\":\""+rs.getString(1)+"\",\"NamaImunisasi\":\""+rs.getString(2)+"\"},";
                 }
             } catch (Exception e) {
                 System.out.println("Notifikasi : "+e);
@@ -383,15 +384,10 @@ public final class MasterCariImunisasi extends javax.swing.JDialog {
                     ps.close();
                 }
             }
-            
-            if (iyembuilder.length() > 0) {
-                iyembuilder.setLength(iyembuilder.length() - 1);
-                fileWriter.write("{\"master_imunisasi\":["+iyembuilder+"]}");
-                fileWriter.flush();
-            }
-            
+            fileWriter.write("{\"master_imunisasi\":["+iyem.substring(0,iyem.length()-1)+"]}");
+            fileWriter.flush();
             fileWriter.close();
-            iyembuilder=null;
+            iyem=null;
         }catch(Exception e){
             System.out.println("Notifikasi : "+e);
         }  
@@ -405,29 +401,17 @@ public final class MasterCariImunisasi extends javax.swing.JDialog {
             Valid.tabelKosong(tabMode);
             response = root.path("master_imunisasi");
             if(response.isArray()){
-                if(TCari.getText().trim().equals("")){
-                    for(JsonNode list:response){
+                for(JsonNode list:response){
+                    if(list.path("KodeImunisasi").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("NamaImunisasi").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
                         tabMode.addRow(new Object[]{
                             list.path("KodeImunisasi").asText(),list.path("NamaImunisasi").asText()
-                        }); 
-                    }
-                }else{
-                    for(JsonNode list:response){
-                        if(list.path("KodeImunisasi").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("NamaImunisasi").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
-                            tabMode.addRow(new Object[]{
-                                list.path("KodeImunisasi").asText(),list.path("NamaImunisasi").asText()
-                            });                    
-                        }
+                        });                    
                     }
                 }
             }
             myObj.close();
         } catch (Exception ex) {
-            if(ex.toString().contains("java.io.FileNotFoundException")){
-                tampil();
-            }else{
-                System.out.println("Notifikasi : "+ex);
-            }
+            System.out.println("Notifikasi : "+ex);
         }
         LCount.setText(""+tabMode.getRowCount());
     }

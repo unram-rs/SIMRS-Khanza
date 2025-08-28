@@ -1047,21 +1047,11 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         ttlhpp=Sequel.cariIsiAngka("select sum(h_beli*jumlah) from toko_detail_jual where nota_jual=?",rs.getString("nota_jual"));
 
                         Sequel.queryu("delete from tampjurnal");
-                        if(Sequel.menyimpantf2("tampjurnal","'"+Penjualan_Toko+"','PENJUALAN','"+ttljual+"','0'","Rekening")==false){
-                            sukses=false;
-                        }    
-                        if(Sequel.menyimpantf2("tampjurnal","'"+rs.getString("kd_rek")+"','KAS DI TANGAN','0','"+ttljual+"'","Rekening")==false){
-                            sukses=false;
-                        } 
-                        if(Sequel.menyimpantf2("tampjurnal","'"+HPP_Barang_Toko+"','HPP Barang Toko','0','"+ttlhpp+"'","Rekening")==false){
-                            sukses=false;
-                        }    
-                        if(Sequel.menyimpantf2("tampjurnal","'"+Persediaan_Barang_Toko+"','Persediaan Barang Toko','"+ttlhpp+"','0'","Rekening")==false){
-                            sukses=false;
-                        }
-                        if(sukses==true){
-                            sukses=jur.simpanJurnal(rs.getString("nota_jual"),"U","BATAL PENJUALAN BARANG TOKO / MINIMARKET / KOPERASI, OLEH "+akses.getkode());
-                        }
+                        Sequel.menyimpan("tampjurnal","'"+Penjualan_Toko+"','PENJUALAN','"+ttljual+"','0'","Rekening");    
+                        Sequel.menyimpan("tampjurnal","'"+rs.getString("kd_rek")+"','KAS DI TANGAN','0','"+ttljual+"'","Rekening"); 
+                        Sequel.menyimpan("tampjurnal","'"+HPP_Barang_Toko+"','HPP Barang Toko','0','"+ttlhpp+"'","Rekening");    
+                        Sequel.menyimpan("tampjurnal","'"+Persediaan_Barang_Toko+"','Persediaan Barang Toko','"+ttlhpp+"','0'","Rekening");                              
+                        sukses=jur.simpanJurnal(rs.getString("nota_jual"),"U","BATAL PENJUALAN BARANG TOKO / MINIMARKET / KOPERASI, OLEH "+akses.getkode());
                   } 
 
                   if(sukses==true){
@@ -1216,11 +1206,11 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 ttldisc=0;
                 ttlongkir=0;
                 while(rs.next()){        
-                    tabMode.addRow(new Object[]{
+                    tabMode.addRow(new String[]{
                         rs.getString("tgl_jual"),rs.getString("nota_jual"),rs.getString("nip")+", "+rs.getString("nama"),
                         rs.getString("no_member")+" "+rs.getString("nm_member"),rs.getString("keterangan"),rs.getString("jns_jual"),rs.getString("nama_bayar")
                     });
-                    tabMode.addRow(new Object[]{
+                    tabMode.addRow(new String[]{
                         "Kode Barang","Nama Barang","Jml & Satuan & Harga(Rp)","Subtotal(Rp)","Ptg(%) Potongan(Rp)","Tambahan(Rp)","Total"
                     });
                     ttlppn=ttlppn+rs.getDouble("ppn");
@@ -1253,27 +1243,27 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                             ttltambahan=ttltambahan+rs2.getDouble("tambahan");
                             subttljual=subttljual+rs2.getDouble("total");
                             ttljual=ttljual+rs2.getDouble("total");
-                            tabMode.addRow(new Object[]{
+                            tabMode.addRow(new String[]{
                                 no+". "+rs2.getString("kode_brng"),rs2.getString("nama_brng"),rs2.getString("jumlah")+" "+rs2.getString("satuan")+" x "+df2.format(rs2.getDouble("h_jual")),
                                 df2.format(rs2.getDouble("subtotal")),"("+df2.format(rs2.getDouble("dis"))+" %) "+df2.format(rs2.getDouble("bsr_dis")),df2.format(rs2.getDouble("tambahan")),
                                 df2.format(rs2.getDouble("total"))
                             });
                             no++;
                         }                        
-                        tabMode.addRow(new Object[]{
+                        tabMode.addRow(new String[]{
                             "","Total",":",df2.format(subttlall),df2.format(subttldisc),df2.format(subttltambahan),df2.format(subttljual)
                         });
                         if(rs.getDouble("ppn")>0){
-                            tabMode.addRow(new Object[]{
+                            tabMode.addRow(new String[]{
                                 "","PPN",":","","","",df2.format(rs.getDouble("ppn"))
                             });
                         }
                         if(rs.getDouble("ongkir")>0){
-                            tabMode.addRow(new Object[]{
+                            tabMode.addRow(new String[]{
                                 "","Ongkir",":","","","",df2.format(rs.getDouble("ongkir"))
                             });
                         }   
-                        tabMode.addRow(new Object[]{
+                        tabMode.addRow(new String[]{
                             "","Total+PPN+Ongkir",":","","","",df2.format(rs.getDouble("ppn")+rs.getDouble("ongkir")+subttljual)
                         });    
                     } catch (Exception e) {

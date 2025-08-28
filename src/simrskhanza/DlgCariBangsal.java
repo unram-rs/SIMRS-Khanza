@@ -381,13 +381,13 @@ public final class DlgCariBangsal extends javax.swing.JDialog {
             file=new File("./cache/bangsal.iyem");
             file.createNewFile();
             fileWriter = new FileWriter(file);
-            StringBuilder iyembuilder = new StringBuilder();
+            iyem="";
             ps=koneksi.prepareStatement("select * from bangsal where bangsal.status='1' order by bangsal.nm_bangsal");
             try {
                 rs=ps.executeQuery();
                 while(rs.next()){
                     tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2) });
-                    iyembuilder.append("{\"KodeKamar\":\"").append(rs.getString(1)).append("\",\"NamaKamar\":\"").append(rs.getString(2).replaceAll("\"","")).append("\"},");
+                    iyem=iyem+"{\"KodeKamar\":\""+rs.getString(1)+"\",\"NamaKamar\":\""+rs.getString(2).replaceAll("\"","")+"\"},";
                 }
             } catch (Exception e) {
                 System.out.println(e);
@@ -399,14 +399,10 @@ public final class DlgCariBangsal extends javax.swing.JDialog {
                     ps.close();
                 }
             }    
-            if (iyembuilder.length() > 0) {
-                iyembuilder.setLength(iyembuilder.length() - 1);
-                fileWriter.write("{\"bangsal\":["+iyembuilder+"]}");
-                fileWriter.flush();
-            }
-            
+            fileWriter.write("{\"bangsal\":["+iyem.substring(0,iyem.length()-1)+"]}");
+            fileWriter.flush();
             fileWriter.close();
-            iyembuilder.setLength(0);
+            iyem=null;
         }catch(Exception e){
             System.out.println("Notifikasi : "+e);
         }
@@ -432,29 +428,17 @@ public final class DlgCariBangsal extends javax.swing.JDialog {
             Valid.tabelKosong(tabMode);
             response = root.path("bangsal");
             if(response.isArray()){
-                if(TCari.getText().trim().equals("")){
-                    for(JsonNode list:response){
+                for(JsonNode list:response){
+                    if(list.path("NamaKamar").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
                         tabMode.addRow(new Object[]{
                             list.path("KodeKamar").asText(),list.path("NamaKamar").asText()
                         });
-                    }
-                }else{
-                    for(JsonNode list:response){
-                        if(list.path("NamaKamar").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
-                            tabMode.addRow(new Object[]{
-                                list.path("KodeKamar").asText(),list.path("NamaKamar").asText()
-                            });
-                        }
                     }
                 }
             }
             myObj.close();
         } catch (Exception ex) {
-            if(ex.toString().contains("java.io.FileNotFoundException")){
-                tampil();
-            }else{
-                System.out.println("Notifikasi : "+ex);
-            }
+            System.out.println("Notifikasi : "+ex);
         }
         LCount.setText(""+tabMode.getRowCount());
     }
@@ -474,10 +458,11 @@ public final class DlgCariBangsal extends javax.swing.JDialog {
         try {
             myObj = new FileReader("./cache/bangsal.iyem");
             root = mapper.readTree(myObj);
+            Valid.tabelKosong(tabMode);
             response = root.path("bangsal");
             if(response.isArray()){
                 for(JsonNode list:response){
-                    if(list.path("KodeKamar").asText().equalsIgnoreCase(kode)){
+                    if(list.path("KodeKamar").asText().toLowerCase().equals(kode)){
                         iyem=list.path("NamaKamar").asText();
                     }
                 }

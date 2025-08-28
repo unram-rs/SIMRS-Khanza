@@ -75,7 +75,7 @@ public class ApiSatuSehat {
     }
     
     public RestTemplate getRest() throws NoSuchAlgorithmException, KeyManagementException {
-        sslContext = SSLContext.getInstance("TLSv1.2");
+        sslContext = SSLContext.getInstance("SSL");
         TrustManager[] trustManagers= {
             new X509TrustManager() {
                 public X509Certificate[] getAcceptedIssuers() {return null;}

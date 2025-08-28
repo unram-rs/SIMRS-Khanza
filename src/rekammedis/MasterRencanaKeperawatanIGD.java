@@ -79,7 +79,7 @@ public class MasterRencanaKeperawatanIGD extends javax.swing.JDialog {
         tbSpesialis.setDefaultRenderer(Object.class, new WarnaTable());
 
         kdrencana.setDocument(new batasInput((byte)3).getKata(kdrencana));
-        namarencana.setDocument(new batasInput((int)1000).getKata(namarencana));
+        namarencana.setDocument(new batasInput((int)150).getKata(namarencana));
         TCari.setDocument(new batasInput((byte)100).getKata(TCari));
         if(koneksiDB.CARICEPAT().equals("aktif")){
             TCari.getDocument().addDocumentListener(new javax.swing.event.DocumentListener(){
@@ -720,7 +720,7 @@ public class MasterRencanaKeperawatanIGD extends javax.swing.JDialog {
                 ps.setString(3,"%"+TCari.getText().trim()+"%");
                 rs=ps.executeQuery();
                 while(rs.next()){
-                    tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)});
+                    tabMode.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)});
                 }
             } catch (Exception e) {
                 System.out.println("Notif : "+e);

@@ -44,6 +44,7 @@ public class DlgPropinsi extends javax.swing.JDialog {
     private ResultSet rs;
     private File file;
     private FileWriter fileWriter;
+    private String iyem;
     private ObjectMapper mapper = new ObjectMapper();
     private JsonNode root;
     private JsonNode response;
@@ -493,13 +494,13 @@ public class DlgPropinsi extends javax.swing.JDialog {
             file=new File("./cache/masterpropinsi.iyem");
             file.createNewFile();
             fileWriter = new FileWriter(file);
-            StringBuilder iyembuilder = new StringBuilder();
+            iyem="";
             ps=koneksi.prepareStatement("select propinsi.nm_prop,propinsi.kd_prop from propinsi");
             try {
                 rs=ps.executeQuery();
                 while(rs.next()){
-                    tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2)});
-                    iyembuilder.append("{\"NamaProp\":\"").append(rs.getString(1)).append("\",\"KodeProp\":\"").append(rs.getString(2)).append("\"},");
+                    tabMode.addRow(new String[]{rs.getString(1),rs.getString(2)});
+                    iyem=iyem+"{\"NamaProp\":\""+rs.getString(1)+"\",\"KodeProp\":\""+rs.getString(2)+"\"},";
                 }
             } catch (Exception e) {
                 System.out.println("Notifikasi : "+e);
@@ -510,16 +511,11 @@ public class DlgPropinsi extends javax.swing.JDialog {
                 if(ps!=null){
                     ps.close();
                 }
-            }  
-            
-            if (iyembuilder.length() > 0) {
-                iyembuilder.setLength(iyembuilder.length() - 1);
-                fileWriter.write("{\"masterpropinsi\":["+iyembuilder+"]}");
-                fileWriter.flush();
-            }
-            
+            }   
+            fileWriter.write("{\"masterpropinsi\":["+iyem.substring(0,iyem.length()-1)+"]}");
+            fileWriter.flush();
             fileWriter.close();
-            iyembuilder=null;
+            iyem=null;             
         }catch(Exception e){
             System.out.println("Notifikasi : "+e);
         }
@@ -533,19 +529,11 @@ public class DlgPropinsi extends javax.swing.JDialog {
             Valid.tabelKosong(tabMode);
             response = root.path("masterpropinsi");
             if(response.isArray()){
-                if(TCari.getText().trim().equals("")){
-                    for(JsonNode list:response){
+                for(JsonNode list:response){
+                    if(list.path("NamaProp").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
                         tabMode.addRow(new Object[]{
                             list.path("NamaProp").asText(),list.path("KodeProp").asText()
                         });
-                    }
-                }else{
-                    for(JsonNode list:response){
-                        if(list.path("NamaProp").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
-                            tabMode.addRow(new Object[]{
-                                list.path("NamaProp").asText(),list.path("KodeProp").asText()
-                            });
-                        }
                     }
                 }
             }
@@ -556,7 +544,7 @@ public class DlgPropinsi extends javax.swing.JDialog {
                     ps.setString(1,"%"+TCari.getText().trim()+"%");
                     rs=ps.executeQuery();
                     while(rs.next()){
-                        tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2)});
+                        tabMode.addRow(new String[]{rs.getString(1),rs.getString(2)});
                     }
                 } catch (Exception e) {
                     System.out.println("Notifikasi : "+e);
@@ -586,7 +574,7 @@ public class DlgPropinsi extends javax.swing.JDialog {
             }
         }
         
-        String iyem="";
+        iyem="";
         try {
             myObj = new FileReader("./cache/masterpropinsi.iyem");
             root = mapper.readTree(myObj);

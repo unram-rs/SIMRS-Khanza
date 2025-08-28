@@ -39,6 +39,7 @@ import javax.swing.table.TableColumn;
  */
 public final class IPSRSCariJenis extends javax.swing.JDialog {
     private final DefaultTableModel tabMode;
+    private sekuel Sequel=new sekuel();
     private validasi Valid=new validasi();
     public IPSRSJenis nm_jenis=new IPSRSJenis(null,false);
     private PreparedStatement ps;
@@ -46,6 +47,7 @@ public final class IPSRSCariJenis extends javax.swing.JDialog {
     private Connection koneksi=koneksiDB.condb();
     private File file;
     private FileWriter fileWriter;
+    private String iyem;
     private ObjectMapper mapper = new ObjectMapper();
     private JsonNode root;
     private JsonNode response;
@@ -381,14 +383,14 @@ public final class IPSRSCariJenis extends javax.swing.JDialog {
             file=new File("./cache/jenisipsrs.iyem");
             file.createNewFile();
             fileWriter = new FileWriter(file);
-            StringBuilder iyembuilder = new StringBuilder();
+            iyem="";
             
             ps=koneksi.prepareStatement("select * from ipsrsjenisbarang order by ipsrsjenisbarang.nm_jenis ");
             try {
                 rs=ps.executeQuery();
                 while(rs.next()){
-                    tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2)});
-                    iyembuilder.append("{\"KodeJenis\":\"").append(rs.getString(1)).append("\",\"NamaJenis\":\"").append(rs.getString(2)).append("\"},");
+                    tabMode.addRow(new String[]{rs.getString(1),rs.getString(2)});
+                    iyem=iyem+"{\"KodeJenis\":\""+rs.getString(1)+"\",\"NamaJenis\":\""+rs.getString(2)+"\"},";
                 }
             } catch (Exception e) {
                 System.out.println(e);
@@ -401,14 +403,10 @@ public final class IPSRSCariJenis extends javax.swing.JDialog {
                 }
             }   
                 
-            if (iyembuilder.length() > 0) {
-                iyembuilder.setLength(iyembuilder.length() - 1);
-                fileWriter.write("{\"jenisipsrs\":["+iyembuilder+"]}");
-                fileWriter.flush();
-            }
-            
+            fileWriter.write("{\"jenisipsrs\":["+iyem.substring(0,iyem.length()-1)+"]}");
+            fileWriter.flush();
             fileWriter.close();
-            iyembuilder=null;
+            iyem=null;
         }catch(Exception e){
             System.out.println("Notifikasi : "+e);
         }
@@ -422,29 +420,17 @@ public final class IPSRSCariJenis extends javax.swing.JDialog {
             Valid.tabelKosong(tabMode);
             response = root.path("jenisipsrs");
             if(response.isArray()){
-                if(TCari.getText().trim().equals("")){
-                    for(JsonNode list:response){
+                for(JsonNode list:response){
+                    if(list.path("NamaJenis").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
                         tabMode.addRow(new Object[]{
                             list.path("KodeJenis").asText(),list.path("NamaJenis").asText()
                         });
-                    }
-                }else{
-                    for(JsonNode list:response){
-                        if(list.path("NamaJenis").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
-                            tabMode.addRow(new Object[]{
-                                list.path("KodeJenis").asText(),list.path("NamaJenis").asText()
-                            });
-                        }
                     }
                 }
             }
             myObj.close();
         } catch (Exception ex) {
-            if(ex.toString().contains("java.io.FileNotFoundException")){
-                tampil();
-            }else{
-                System.out.println("Notifikasi : "+ex);
-            }
+            System.out.println("Notifikasi : "+ex);
         }
         LCount.setText(""+tabMode.getRowCount());
     }

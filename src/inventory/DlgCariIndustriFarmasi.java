@@ -44,6 +44,7 @@ public final class DlgCariIndustriFarmasi extends javax.swing.JDialog {
     private Connection koneksi=koneksiDB.condb();
     private File file;
     private FileWriter fileWriter;
+    private String iyem;
     private ObjectMapper mapper = new ObjectMapper();
     private JsonNode root;
     private JsonNode response;
@@ -386,17 +387,17 @@ public final class DlgCariIndustriFarmasi extends javax.swing.JDialog {
             file=new File("./cache/industrifarmasi.iyem");
             file.createNewFile();
             fileWriter = new FileWriter(file);
-            StringBuilder iyembuilder = new StringBuilder();
+            iyem="";
             
             ps=koneksi.prepareStatement("select * from industrifarmasi order by industrifarmasi.nama_industri ");
             try {
                 rs=ps.executeQuery();
                 while(rs.next()){
                     //"Kode I.F.","Industri Farmasi","Alamat Industri Farmasi","Kota","No.Telp"
-                    tabMode.addRow(new Object[]{
+                    tabMode.addRow(new String[]{
                         rs.getString("kode_industri"),rs.getString("nama_industri"),rs.getString("alamat"),rs.getString("kota"),rs.getString("no_telp")
                     });
-                    iyembuilder.append("{\"KodeIF\":\"").append(rs.getString("kode_industri")).append("\",\"NamaIF\":\"").append(rs.getString("nama_industri")).append("\",\"Alamat\":\"").append(rs.getString("alamat")).append("\",\"Kota\":\"").append(rs.getString("kota")).append("\",\"NoTelp\":\"").append(rs.getString("no_telp")).append("\"},");
+                    iyem=iyem+"{\"KodeIF\":\""+rs.getString("kode_industri")+"\",\"NamaIF\":\""+rs.getString("nama_industri")+"\",\"Alamat\":\""+rs.getString("alamat")+"\",\"Kota\":\""+rs.getString("kota")+"\",\"NoTelp\":\""+rs.getString("no_telp")+"\"},";
                 }
             } catch (Exception e) {
                 System.out.println(e);
@@ -409,14 +410,10 @@ public final class DlgCariIndustriFarmasi extends javax.swing.JDialog {
                 }
             }   
                 
-            if (iyembuilder.length() > 0) {
-                iyembuilder.setLength(iyembuilder.length() - 1);
-                fileWriter.write("{\"industrifarmasi\":["+iyembuilder+"]}");
-                fileWriter.flush();
-            }
-            
+            fileWriter.write("{\"industrifarmasi\":["+iyem.substring(0,iyem.length()-1)+"]}");
+            fileWriter.flush();
             fileWriter.close();
-            iyembuilder=null;
+            iyem=null;
         }catch(Exception e){
             System.out.println("Notifikasi : "+e);
         }
@@ -430,29 +427,17 @@ public final class DlgCariIndustriFarmasi extends javax.swing.JDialog {
             Valid.tabelKosong(tabMode);
             response = root.path("industrifarmasi");
             if(response.isArray()){
-                if(TCari.getText().trim().equals("")){
-                    for(JsonNode list:response){
+                for(JsonNode list:response){
+                    if(list.path("KodeIF").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("NamaIF").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("Kota").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
                         tabMode.addRow(new Object[]{
                             list.path("KodeIF").asText(),list.path("NamaIF").asText(),list.path("Alamat").asText(),list.path("Kota").asText(),list.path("NoTelp").asText()
                         });
-                    }
-                }else{
-                    for(JsonNode list:response){
-                        if(list.path("KodeIF").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("NamaIF").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("Kota").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
-                            tabMode.addRow(new Object[]{
-                                list.path("KodeIF").asText(),list.path("NamaIF").asText(),list.path("Alamat").asText(),list.path("Kota").asText(),list.path("NoTelp").asText()
-                            });
-                        }
                     }
                 }
             }
             myObj.close();
         } catch (Exception e) {
-            if(e.toString().contains("java.io.FileNotFoundException")){
-                tampil();
-            }else{
-                System.out.println("Notifikasi : "+e);
-            }
+            System.out.println("Notifikasi : "+e);
         }
         LCount.setText(""+tabMode.getRowCount());
     }

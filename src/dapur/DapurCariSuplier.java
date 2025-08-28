@@ -1,6 +1,7 @@
 package dapur;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dapur.DapurSuplier;
 import fungsi.WarnaTable;
 import fungsi.batasInput;
 import fungsi.koneksiDB;
@@ -29,6 +30,7 @@ public class DapurCariSuplier extends javax.swing.JDialog {
     private int i;
     private File file;
     private FileWriter fileWriter;
+    private String iyem;
     private ObjectMapper mapper = new ObjectMapper();
     private JsonNode root;
     private JsonNode response;
@@ -352,7 +354,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
             file=new File("./cache/suplierdapur.iyem");
             file.createNewFile();
             fileWriter = new FileWriter(file);
-            StringBuilder iyembuilder = new StringBuilder();
+            iyem="";
             ps=koneksi.prepareStatement(
                     "select dapursuplier.kode_suplier, dapursuplier.nama_suplier, "+
                     " dapursuplier.alamat,dapursuplier.kota, dapursuplier.no_telp,"+
@@ -365,7 +367,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),
                         rs.getString(5),rs.getString(6),rs.getString(7)
                     });
-                    iyembuilder.append("{\"KodeSupplier\":\"").append(rs.getString(1)).append("\",\"NamaSupplier\":\"").append(rs.getString(2)).append("\",\"AlamatSupplier\":\"").append(rs.getString(3)).append("\",\"Kota\":\"").append(rs.getString(4)).append("\",\"NoTelp\":\"").append(rs.getString(5)).append("\",\"NamaBank\":\"").append(rs.getString(6)).append("\",\"NoRekening\":\"").append(rs.getString(7)).append("\"},");
+                    iyem=iyem+"{\"KodeSupplier\":\""+rs.getString(1)+"\",\"NamaSupplier\":\""+rs.getString(2)+"\",\"AlamatSupplier\":\""+rs.getString(3)+"\",\"Kota\":\""+rs.getString(4)+"\",\"NoTelp\":\""+rs.getString(5)+"\",\"NamaBank\":\""+rs.getString(6)+"\",\"NoRekening\":\""+rs.getString(7)+"\"},";
                 }
             } catch (Exception e) {
                 System.out.println(e);
@@ -377,15 +379,10 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     ps.close();
                 }
             }
-            
-            if (iyembuilder.length() > 0) {
-                iyembuilder.setLength(iyembuilder.length() - 1);
-                fileWriter.write("{\"suplierdapur\":["+iyembuilder+"]}");
-                fileWriter.flush();
-            }
-            
+            fileWriter.write("{\"suplierdapur\":["+iyem.substring(0,iyem.length()-1)+"]}");
+            fileWriter.flush();
             fileWriter.close();
-            iyembuilder=null;
+            iyem=null;
         }catch(Exception e){
             System.out.println("Notifikasi : "+e);
         }
@@ -409,11 +406,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
             }
             myObj.close();
         } catch (Exception ex) {
-            if(ex.toString().contains("java.io.FileNotFoundException")){
-                tampil();
-            }else{
-                System.out.println("Notifikasi : "+ex);
-            }
+            System.out.println("Notifikasi : "+ex);
         }
         LCount.setText(""+tabMode.getRowCount());
     }
@@ -427,7 +420,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     }
     
     public void isCek(){
-        BtnTambah.setEnabled(akses.getdapur_suplier());
+        BtnTambah.setEnabled(akses.getsuplier());
     }
     
 }

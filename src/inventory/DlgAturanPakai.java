@@ -326,13 +326,9 @@ public class DlgAturanPakai extends javax.swing.JDialog {
         if(Nama.getText().trim().equals("")){
             Valid.textKosong(Nama,"Kabupaten");
         }else{
-            if(Sequel.menyimpantf("master_aturan_pakai","'"+Nama.getText()+"'","Aturan Pakai")==true){
-                tabMode.addRow(new Object[]{
-                    Nama.getText()
-                });
-                LCount.setText(""+tabMode.getRowCount());
-                emptTeks();
-            }
+            Sequel.menyimpan("master_aturan_pakai","'"+Nama.getText()+"'","Aturan Pakai");
+            tampil();
+            emptTeks();
         }
 }//GEN-LAST:event_BtnSimpanActionPerformed
 
@@ -355,13 +351,9 @@ public class DlgAturanPakai extends javax.swing.JDialog {
 }//GEN-LAST:event_BtnBatalKeyPressed
 
     private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnHapusActionPerformed
-        if(Valid.hapusTabletf(tabMode,Nama,"master_aturan_pakai","aturan")==true){
-            if(tbkabupaten.getSelectedRow()!= -1){
-                tabMode.removeRow(tbkabupaten.getSelectedRow());
-                emptTeks();
-                LCount.setText(""+tabMode.getRowCount());
-            }
-        }
+        Valid.hapusTable(tabMode,Nama,"master_aturan_pakai","aturan");
+        tampil();
+        emptTeks();
 }//GEN-LAST:event_BtnHapusActionPerformed
 
     private void BtnHapusKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BtnHapusKeyPressed
@@ -505,7 +497,7 @@ public class DlgAturanPakai extends javax.swing.JDialog {
                 ps.setString(1,"%"+TCari.getText().trim()+"%");
                 rs=ps.executeQuery();
                 while(rs.next()){
-                    tabMode.addRow(new Object[]{rs.getString(1)});
+                    tabMode.addRow(new String[]{rs.getString(1)});
                 }
             } catch (Exception e) {
                 System.out.println("Notifikasi : "+e);

@@ -46,8 +46,10 @@ public final class DlgCariPoli2 extends javax.swing.JDialog {
     private ResultSet rs;
     private Calendar cal = Calendar.getInstance();
     private int day = cal.get(Calendar.DAY_OF_WEEK);
+    private String hari="";
     private File file;
     private FileWriter fileWriter;
+    private String iyem;
     private ObjectMapper mapper = new ObjectMapper();
     private JsonNode root;
     private JsonNode response;
@@ -371,8 +373,7 @@ public final class DlgCariPoli2 extends javax.swing.JDialog {
             file=new File("./cache/poli2.iyem");
             file.createNewFile();
             fileWriter = new FileWriter(file);
-            StringBuilder iyembuilder = new StringBuilder();
-            String hari="";
+            iyem="";
             ps=koneksi.prepareStatement(
                     "select poliklinik.kd_poli,poliklinik.nm_poli,poliklinik.registrasi,poliklinik.registrasilama "+
                     "from poliklinik inner join jadwal inner join dokter on poliklinik.kd_poli=jadwal.kd_poli "+
@@ -408,7 +409,7 @@ public final class DlgCariPoli2 extends javax.swing.JDialog {
                 rs=ps.executeQuery(); 
                 while(rs.next()){
                     tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)});
-                    iyembuilder.append("{\"KodeUnit\":\""+rs.getString(1)+"\",\"NamaUnit\":\""+rs.getString(2)+"\",\"RegistrasiBaru\":\""+rs.getString(3)+"\",\"RegistrasiLama\":\""+rs.getString(4)+"\"},");
+                    iyem=iyem+"{\"KodeUnit\":\""+rs.getString(1)+"\",\"NamaUnit\":\""+rs.getString(2)+"\",\"RegistrasiBaru\":\""+rs.getString(3)+"\",\"RegistrasiLama\":\""+rs.getString(4)+"\"},";
                 }  
             }catch(Exception ex){
                 System.out.println(ex);
@@ -420,15 +421,10 @@ public final class DlgCariPoli2 extends javax.swing.JDialog {
                     ps.close();
                 }
             }  
-            if (iyembuilder.length() > 0) {
-                iyembuilder.setLength(iyembuilder.length() - 1);
-                fileWriter.write("{\"poli\":["+iyembuilder+"]}");
-                fileWriter.flush();
-            }
-            
+            fileWriter.write("{\"poli\":["+iyem.substring(0,iyem.length()-1)+"]}");
+            fileWriter.flush();
             fileWriter.close();
-            iyembuilder=null;
-            hari=null;
+            iyem=null;
         } catch (Exception e) {
             System.out.println("Notifikasi : "+e);
         }
@@ -461,19 +457,11 @@ public final class DlgCariPoli2 extends javax.swing.JDialog {
             Valid.tabelKosong(tabMode);
             response = root.path("poli");
             if(response.isArray()){
-                if(TCari.getText().trim().equals("")){
-                    for(JsonNode list:response){
+                for(JsonNode list:response){
+                    if(list.path("KodeUnit").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("NamaUnit").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
                         tabMode.addRow(new Object[]{
                             list.path("KodeUnit").asText(),list.path("NamaUnit").asText(),list.path("RegistrasiBaru").asText(),list.path("RegistrasiLama").asText()
                         });
-                    }
-                }else{
-                    for(JsonNode list:response){
-                        if(list.path("KodeUnit").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("NamaUnit").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
-                            tabMode.addRow(new Object[]{
-                                list.path("KodeUnit").asText(),list.path("NamaUnit").asText(),list.path("RegistrasiBaru").asText(),list.path("RegistrasiLama").asText()
-                            });
-                        }
                     }
                 }
             }

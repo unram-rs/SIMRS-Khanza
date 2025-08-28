@@ -530,9 +530,13 @@ public class DapurCariPembelian extends javax.swing.JDialog {
         panelisi3.add(label13);
         label13.setBounds(305, 40, 80, 23);
 
-        kdsup.setEditable(false);
         kdsup.setName("kdsup"); // NOI18N
         kdsup.setPreferredSize(new java.awt.Dimension(80, 23));
+        kdsup.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                kdsupKeyPressed(evt);
+            }
+        });
         panelisi3.add(kdsup);
         kdsup.setBounds(389, 10, 80, 23);
 
@@ -656,6 +660,20 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
         barang.setAlwaysOnTop(false);
         barang.setVisible(true);
     }//GEN-LAST:event_btnBarangActionPerformed
+
+    private void kdsupKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_kdsupKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_PAGE_DOWN){
+            Sequel.cariIsi("select nama_suplier from dapursuplier where kode_suplier=?", nmsup,kdsup.getText());            
+        }else if(evt.getKeyCode()==KeyEvent.VK_PAGE_UP){
+            Sequel.cariIsi("select nama_suplier from dapursuplier where kode_suplier=?", nmsup,kdsup.getText());
+            NoFaktur.requestFocus();
+        }else if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+            Sequel.cariIsi("select nama_suplier from dapursuplier where kode_suplier=?", nmsup,kdsup.getText());
+            kdptg.requestFocus();
+        }else if(evt.getKeyCode()==KeyEvent.VK_UP){
+            btnSuplierActionPerformed(null);
+        }
+    }//GEN-LAST:event_kdsupKeyPressed
 
     private void NoFakturKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NoFakturKeyPressed
         Valid.pindah(evt, BtnKeluar, kdsup);
@@ -817,21 +835,18 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                       }
 
                       Sequel.queryu("delete from tampjurnal");
-                      if(Sequel.menyimpantf("tampjurnal","?,?,?,?","Rekening",4,new String[]{akunpengadaan,"PEMBELIAN","0",rs.getString("total")})==false){
-                          sukses=false;
-                      }    
+                      Sequel.menyimpan("tampjurnal","?,?,?,?","Rekening",4,new String[]{
+                          akunpengadaan,"PEMBELIAN","0",rs.getString("total")
+                      });    
                       if(rs.getDouble("ppn")>0){
-                          if(Sequel.menyimpantf("tampjurnal","?,?,?,?","Rekening",4,new String[]{PPN_Masukan,"PPN Masukan Dapur","0",rs.getString("ppn")})==false){
-                                sukses=false;
-                          }
+                          Sequel.menyimpan("tampjurnal","?,?,?,?","Rekening",4,new String[]{
+                            PPN_Masukan,"PPN Masukan Dapur","0",rs.getString("ppn")
+                          }); 
                       }
-                      if(Sequel.menyimpantf("tampjurnal","?,?,?,?","Rekening",4,new String[]{rs.getString("kd_rek"),"KAS DI TANGAN",rs.getString("tagihan"),"0"})==false){
-                          sukses=false;
-                      }
-                      if(sukses==true){
-                          sukses=jur.simpanJurnal(rs.getString("no_faktur"),"U","PEMBATALAN PEMBELIAN BARANG DAPUR KERING & BASAH"+", OLEH "+akses.getkode());  
-                      }
-                        
+                      Sequel.menyimpan("tampjurnal","?,?,?,?","Rekening",4,new String[]{
+                          rs.getString("kd_rek"),"KAS DI TANGAN",rs.getString("tagihan"),"0"
+                      }); 
+                      sukses=jur.simpanJurnal(rs.getString("no_faktur"),"U","PEMBATALAN PEMBELIAN BARANG DAPUR KERING & BASAH"+", OLEH "+akses.getkode());
                       if(sukses==true){
                           Sequel.queryu2("delete from dapurpembelian where no_faktur=?",1,new String[]{tbDokter.getValueAt(tbDokter.getSelectedRow(),1).toString()});
                           Sequel.Commit();

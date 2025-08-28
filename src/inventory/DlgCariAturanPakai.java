@@ -43,6 +43,7 @@ public final class DlgCariAturanPakai extends javax.swing.JDialog {
     private Connection koneksi=koneksiDB.condb();
     private File file;
     private FileWriter fileWriter;
+    private String iyem;
     private ObjectMapper mapper = new ObjectMapper();
     private JsonNode root;
     private JsonNode response;
@@ -376,14 +377,14 @@ public final class DlgCariAturanPakai extends javax.swing.JDialog {
             file=new File("./cache/aturanpakai.iyem");
             file.createNewFile();
             fileWriter = new FileWriter(file);
-            StringBuilder iyembuilder = new StringBuilder();
+            iyem="";
             
             ps=koneksi.prepareStatement("select * from master_aturan_pakai order by aturan ");
             try {
                 rs=ps.executeQuery();
                 while(rs.next()){
-                    tabMode.addRow(new Object[]{rs.getString(1)});
-                    iyembuilder.append("{\"AturanPakai\":\"").append(rs.getString(1)).append("\"},");
+                    tabMode.addRow(new String[]{rs.getString(1)});
+                    iyem=iyem+"{\"AturanPakai\":\""+rs.getString(1)+"\"},";
                 }
             } catch (Exception e) {
                 System.out.println(e);
@@ -396,14 +397,10 @@ public final class DlgCariAturanPakai extends javax.swing.JDialog {
                 }
             }   
                 
-            if (iyembuilder.length() > 0) {
-                iyembuilder.setLength(iyembuilder.length() - 1);
-                fileWriter.write("{\"aturanpakai\":["+iyembuilder+"]}");
-                fileWriter.flush();
-            }
-            
+            fileWriter.write("{\"aturanpakai\":["+iyem.substring(0,iyem.length()-1)+"]}");
+            fileWriter.flush();
             fileWriter.close();
-            iyembuilder=null;
+            iyem=null;
         }catch(Exception e){
             System.out.println("Notifikasi : "+e);
         }
@@ -417,29 +414,17 @@ public final class DlgCariAturanPakai extends javax.swing.JDialog {
             Valid.tabelKosong(tabMode);
             response = root.path("aturanpakai");
             if(response.isArray()){
-                if(TCari.getText().trim().equals("")){
-                    for(JsonNode list:response){
+                for(JsonNode list:response){
+                    if(list.path("AturanPakai").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
                         tabMode.addRow(new Object[]{
                             list.path("AturanPakai").asText()
                         });
-                    }
-                }else{
-                    for(JsonNode list:response){
-                        if(list.path("AturanPakai").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
-                            tabMode.addRow(new Object[]{
-                                list.path("AturanPakai").asText()
-                            });
-                        }
                     }
                 }
             }
             myObj.close();
         } catch (Exception ex) {
-            if(ex.toString().contains("java.io.FileNotFoundException")){
-                tampil();
-            }else{
-                System.out.println("Notifikasi : "+ex);
-            }
+            System.out.println("Notifikasi : "+ex);
         }
         LCount.setText(""+tabMode.getRowCount());
     }

@@ -44,6 +44,7 @@ public final class DlgCariPeminjamPiutang extends javax.swing.JDialog {
     private ResultSet rs;
     private File file;
     private FileWriter fileWriter;
+    private String iyem;
     private ObjectMapper mapper = new ObjectMapper();
     private JsonNode root;
     private JsonNode response;
@@ -340,14 +341,7 @@ public final class DlgCariPeminjamPiutang extends javax.swing.JDialog {
     }//GEN-LAST:event_formWindowActivated
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        try {
-            if(Valid.daysOld("./cache/peminjampiutang.iyem")<30){
-                tampil2();
-            }else{
-                tampil();
-            }
-        } catch (Exception e) {
-        }
+        tampil();
     }//GEN-LAST:event_formWindowOpened
 
     /**
@@ -387,7 +381,7 @@ public final class DlgCariPeminjamPiutang extends javax.swing.JDialog {
             file=new File("./cache/peminjampiutang.iyem");
             file.createNewFile();
             fileWriter = new FileWriter(file);
-            StringBuilder iyembuilder = new StringBuilder();
+            iyem="";
             ps=koneksi.prepareStatement("select peminjampiutang.kode_peminjam,peminjampiutang.nama_peminjam,peminjampiutang.alamat,peminjampiutang.no_telp, "+
                     "peminjampiutang.kd_rek,rekening.nm_rek from peminjampiutang inner join rekening on peminjampiutang.kd_rek=rekening.kd_rek "+
                     "where peminjampiutang.status='1' order by nama_peminjam");
@@ -395,7 +389,7 @@ public final class DlgCariPeminjamPiutang extends javax.swing.JDialog {
                 rs=ps.executeQuery();
                 while(rs.next()){
                     tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6)});
-                    iyembuilder.append("{\"Kode\":\"").append(rs.getString(1)).append("\",\"Peminjam\":\"").append(rs.getString(2)).append("\",\"Alamat\":\"").append(rs.getString(3)).append("\",\"NoTelp\":\"").append(rs.getString(4)).append("\",\"KodeRekening\":\"").append(rs.getString(5)).append("\",\"NamaRekening\":\"").append(rs.getString(6)).append("\"},");
+                    iyem=iyem+"{\"Kode\":\""+rs.getString(1)+"\",\"Peminjam\":\""+rs.getString(2)+"\",\"Alamat\":\""+rs.getString(3)+"\",\"NoTelp\":\""+rs.getString(4)+"\",\"KodeRekening\":\""+rs.getString(5)+"\",\"NamaRekening\":\""+rs.getString(6)+"\"},";
                 }
             }catch(Exception e){
                 System.out.println("Notifikasi : "+e);
@@ -409,14 +403,10 @@ public final class DlgCariPeminjamPiutang extends javax.swing.JDialog {
                 }
             }
 
-            if (iyembuilder.length() > 0) {
-                iyembuilder.setLength(iyembuilder.length() - 1);
-                fileWriter.write("{\"peminjampiutang\":["+iyembuilder+"]}");
-                fileWriter.flush();
-            }
-            
+            fileWriter.write("{\"peminjampiutang\":["+iyem.substring(0,iyem.length()-1)+"]}");
+            fileWriter.flush();
             fileWriter.close();
-            iyembuilder=null;
+            iyem=null;
         } catch (Exception e) {
             System.out.println("Notifikasi : "+e);
         }
@@ -432,7 +422,7 @@ public final class DlgCariPeminjamPiutang extends javax.swing.JDialog {
     }
     
     public void isCek(){        
-        BtnTambah.setEnabled(akses.getpeminjam_piutang());
+        BtnTambah.setEnabled(akses.getadmin());
     }
     
     private void tampil2() {

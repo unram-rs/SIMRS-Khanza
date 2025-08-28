@@ -44,6 +44,7 @@ public class DlgKabupaten extends javax.swing.JDialog {
     private ResultSet rs;
     private File file;
     private FileWriter fileWriter;
+    private String iyem;
     private ObjectMapper mapper = new ObjectMapper();
     private JsonNode root;
     private JsonNode response;
@@ -498,13 +499,13 @@ public class DlgKabupaten extends javax.swing.JDialog {
             file=new File("./cache/masterkabupaten.iyem");
             file.createNewFile();
             fileWriter = new FileWriter(file);
-            StringBuilder iyembuilder = new StringBuilder();
+            iyem="";
             ps=koneksi.prepareStatement("select kabupaten.nm_kab,kabupaten.kd_kab from kabupaten");
             try {
                 rs=ps.executeQuery();
                 while(rs.next()){
-                    tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2)});
-                    iyembuilder.append("{\"NamaKab\":\"").append(rs.getString(1)).append("\",\"KodeKab\":\"").append(rs.getString(2)).append("\"},");
+                    tabMode.addRow(new String[]{rs.getString(1),rs.getString(2)});
+                    iyem=iyem+"{\"NamaKab\":\""+rs.getString(1)+"\",\"KodeKab\":\""+rs.getString(2)+"\"},";
                 }
             } catch (Exception e) {
                 System.out.println("Notifikasi : "+e);
@@ -516,14 +517,10 @@ public class DlgKabupaten extends javax.swing.JDialog {
                     ps.close();
                 }
             }
-            if (iyembuilder.length() > 0) {
-                iyembuilder.setLength(iyembuilder.length() - 1);
-                fileWriter.write("{\"masterkabupaten\":["+iyembuilder+"]}");
-                fileWriter.flush();
-            }
-            
+            fileWriter.write("{\"masterkabupaten\":["+iyem.substring(0,iyem.length()-1)+"]}");
+            fileWriter.flush();
             fileWriter.close();
-            iyembuilder=null;
+            iyem=null;
         }catch(Exception e){
             System.out.println("Notifikasi : "+e);
         }
@@ -537,19 +534,11 @@ public class DlgKabupaten extends javax.swing.JDialog {
             Valid.tabelKosong(tabMode);
             response = root.path("masterkabupaten");
             if(response.isArray()){
-                if(TCari.getText().trim().equals("")){
-                    for(JsonNode list:response){
+                for(JsonNode list:response){
+                    if(list.path("NamaKab").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
                         tabMode.addRow(new Object[]{
                             list.path("NamaKab").asText(),list.path("KodeKab").asText()
                         });
-                    }
-                }else{
-                    for(JsonNode list:response){
-                        if(list.path("NamaKab").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
-                            tabMode.addRow(new Object[]{
-                                list.path("NamaKab").asText(),list.path("KodeKab").asText()
-                            });
-                        }
                     }
                 }
             }
@@ -560,7 +549,7 @@ public class DlgKabupaten extends javax.swing.JDialog {
                     ps.setString(1,"%"+TCari.getText().trim()+"%");
                     rs=ps.executeQuery();
                     while(rs.next()){
-                        tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2)});
+                        tabMode.addRow(new String[]{rs.getString(1),rs.getString(2)});
                     }
                 } catch (Exception e) {
                     System.out.println("Notifikasi : "+e);
@@ -590,7 +579,7 @@ public class DlgKabupaten extends javax.swing.JDialog {
             }
         }
         
-        String iyem="";
+        iyem="";
         try {
             myObj = new FileReader("./cache/masterkabupaten.iyem");
             root = mapper.readTree(myObj);

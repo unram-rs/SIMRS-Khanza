@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fungsi.WarnaTable;
 import fungsi.batasInput;
 import fungsi.koneksiDB;
+import fungsi.sekuel;
 import fungsi.validasi;
 import fungsi.akses;
 import java.awt.Cursor;
@@ -37,12 +38,15 @@ import javax.swing.table.TableColumn;
  */
 public final class DlgCariKategoriPemasukanLain extends javax.swing.JDialog {
     private final DefaultTableModel tabMode;
+    private sekuel Sequel=new sekuel();
     private validasi Valid=new validasi();
     private Connection koneksi=koneksiDB.condb();
     private PreparedStatement ps;
     private ResultSet rs;
+    private int pilihan=0;
     private File file;
     private FileWriter fileWriter;
+    private String iyem;
     private ObjectMapper mapper = new ObjectMapper();
     private JsonNode root;
     private JsonNode response;
@@ -321,7 +325,7 @@ public final class DlgCariKategoriPemasukanLain extends javax.swing.JDialog {
             file=new File("./cache/kategoripemasukkan.iyem");
             file.createNewFile();
             fileWriter = new FileWriter(file);
-            StringBuilder iyembuilder = new StringBuilder();
+            iyem="";
             ps=koneksi.prepareStatement(
                      "select kategori_pemasukan_lain.kode_kategori,kategori_pemasukan_lain.nama_kategori,akun1.nm_rek as akun1,akun2.nm_rek as akun2 "+
                      "from kategori_pemasukan_lain inner join rekening as akun1 on kategori_pemasukan_lain.kd_rek=akun1.kd_rek "+
@@ -332,7 +336,7 @@ public final class DlgCariKategoriPemasukanLain extends javax.swing.JDialog {
                     tabMode.addRow(new Object[]{
                         rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)
                     });
-                    iyembuilder.append("{\"Kode\":\"").append(rs.getString(1)).append("\",\"Kategori\":\"").append(rs.getString(2)).append("\",\"AkunRekening\":\"").append(rs.getString(3)).append("\",\"KontraAkun\":\"").append(rs.getString(4)).append("\"},");
+                    iyem=iyem+"{\"Kode\":\""+rs.getString(1)+"\",\"Kategori\":\""+rs.getString(2)+"\",\"AkunRekening\":\""+rs.getString(3)+"\",\"KontraAkun\":\""+rs.getString(4)+"\"},";
                 }
             } catch (Exception e) {
                 System.out.println("Notif : "+e);
@@ -344,14 +348,11 @@ public final class DlgCariKategoriPemasukanLain extends javax.swing.JDialog {
                     ps.close();
                 }
             }
-            if (iyembuilder.length() > 0) {
-                iyembuilder.setLength(iyembuilder.length() - 1);
-                fileWriter.write("{\"kategoripemasukkan\":["+iyembuilder+"]}");
-                fileWriter.flush();
-            }
             
+            fileWriter.write("{\"kategoripemasukkan\":["+iyem.substring(0,iyem.length()-1)+"]}");
+            fileWriter.flush();
             fileWriter.close();
-            iyembuilder=null;
+            iyem=null;
         }catch(Exception e){
             System.out.println("Notifikasi : "+e);
         }
@@ -365,29 +366,17 @@ public final class DlgCariKategoriPemasukanLain extends javax.swing.JDialog {
             Valid.tabelKosong(tabMode);
             response = root.path("kategoripemasukkan");
             if(response.isArray()){
-                if(TCari.getText().trim().equals("")){
-                    for(JsonNode list:response){
+                for(JsonNode list:response){
+                    if(list.path("Kode").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("Kategori").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
                         tabMode.addRow(new Object[]{
                             list.path("Kode").asText(),list.path("Kategori").asText(),list.path("AkunRekening").asText(),list.path("KontraAkun").asText()
                         });
-                    }
-                }else{
-                    for(JsonNode list:response){
-                        if(list.path("Kode").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("Kategori").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
-                            tabMode.addRow(new Object[]{
-                                list.path("Kode").asText(),list.path("Kategori").asText(),list.path("AkunRekening").asText(),list.path("KontraAkun").asText()
-                            });
-                        }
                     }
                 }
             }
             myObj.close();
         } catch (Exception ex) {
-            if(ex.toString().contains("java.io.FileNotFoundException")){
-                tampil();
-            }else{
-                System.out.println("Notifikasi : "+ex);
-            }
+            System.out.println("Notifikasi : "+ex);
         }
         LCount.setText(""+tabMode.getRowCount());
     } 
