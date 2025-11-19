@@ -1,0 +1,4 @@
+<project name="SIMRSKhanza-NC" basedir=".">
+    <property file="nbproject/project.rs-server.properties"/>
+    <import file="nbproject/build-impl.xml"/>
+</project>
