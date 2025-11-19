@@ -29,7 +29,7 @@ jobs:
       - name: Build with Ant
         run: |
           echo "Building project with Ant on ${DEPLOY_HOST}:${DEPLOY_PATH}"
-          ssh "${DEPLOY_USER}@${DEPLOY_HOST}" "cd ${DEPLOY_PATH} && ant -f build-rs-server.xml clean jar"
+          ssh "${DEPLOY_USER}@${DEPLOY_HOST}" "cd ${DEPLOY_PATH} && ant clean jar"
 
       - name: Clean DEPLOY_BUILD directory
         run: |
