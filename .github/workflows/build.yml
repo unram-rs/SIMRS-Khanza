@@ -24,7 +24,7 @@ jobs:
       - name: Update project.properties library path
         run: |
           echo "Updating library path in ${DEPLOY_PATH}/nbproject/project.properties on ${DEPLOY_HOST}"
-          ssh "${DEPLOY_USER}@${DEPLOY_HOST}" "FILE=\"${DEPLOY_PATH}/nbproject/project.properties\"; if [ -f \"$FILE\" ]; then sed -i.bak 's#/Users/windiartonugroho/Lib/#/home/simrs/nextcloud/master/SIMRS-Khanza-Libs/#g' \"$FILE\"; else echo \"File not found: $FILE\" >&2; exit 1; fi"
+          ssh "${DEPLOY_USER}@${DEPLOY_HOST}" "FILE='${DEPLOY_PATH}/nbproject/project.properties'; if [ -f \"\$FILE\" ]; then sed -i.bak 's#/Users/windiartonugroho/Lib/#/home/simrs/nextcloud/master/SIMRS-Khanza-Libs/#g' \"\$FILE\"; else echo \"File not found: \$FILE\" >&2; exit 1; fi"
 
       - name: Build with Ant
         run: |
