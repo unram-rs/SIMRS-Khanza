@@ -1,0 +1,38 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - utama
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: [self-hosted]
+    environment: Prod
+    env:
+      DEPLOY_USER: ${{ vars.USER }}
+      DEPLOY_HOST: ${{ vars.HOST }}
+      DEPLOY_PATH: ${{ vars.PATH }}
+      DEPLOY_BUILD: ${{ vars.BUILD }}
+    steps:
+      - name: Git pull (update code)
+        run: |
+          echo "Pulling latest code on ${DEPLOY_HOST}:${DEPLOY_PATH}"
+          ssh "${DEPLOY_USER}@${DEPLOY_HOST}" "cd ${DEPLOY_PATH} && git pull --ff-only"
+
+      - name: Build with Ant
+        run: |
+          echo "Building project with Ant on ${DEPLOY_HOST}:${DEPLOY_PATH}"
+          ssh "${DEPLOY_USER}@${DEPLOY_HOST}" "cd ${DEPLOY_PATH} && ant -f build-rs-server.xml clean jar"
+
+      - name: Clean DEPLOY_BUILD directory
+        run: |
+          echo "Cleaning build directory ${DEPLOY_BUILD} on ${DEPLOY_HOST}"
+          ssh "${DEPLOY_USER}@${DEPLOY_HOST}" "if [ -d \"${DEPLOY_BUILD}\" ]; then rm -rf \"${DEPLOY_BUILD:?}\"/* \"${DEPLOY_BUILD:?}\"/.[!.]* \"${DEPLOY_BUILD:?}\"/..?* 2>/dev/null || true; else mkdir -p \"${DEPLOY_BUILD}\"; fi"
+
+      - name: Copy dist to DEPLOY_BUILD
+        run: |
+          echo "Copying artifacts from ${DEPLOY_PATH}/dist/ to ${DEPLOY_BUILD}/ on ${DEPLOY_HOST}"
+          # Prefer rsync to include dotfiles; fallback to tar if rsync missing
+          ssh "${DEPLOY_USER}@${DEPLOY_HOST}" "mkdir -p \"${DEPLOY_BUILD}\"; if command -v rsync >/dev/null 2>&1; then rsync -a \"${DEPLOY_PATH}/dist/\" \"${DEPLOY_BUILD}/\"; else cd \"${DEPLOY_PATH}/dist\" && tar cf - . | (cd \"${DEPLOY_BUILD}\" && tar xpf -); fi"
