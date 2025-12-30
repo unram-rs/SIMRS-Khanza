@@ -1346,6 +1346,16 @@ public class koneksiDB {
         return var;
     }
     
+    public static String ENABLEDPASIENEDIT(){
+        try{
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var=prop.getProperty("ENABLEDPASIENEDIT");
+        }catch(Exception e){
+            var=""; 
+        }
+        return var;
+    }
+    
     public static String URLAPISMARTCLAIM(){
         try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
             prop.loadFromXML(fis);
