@@ -3431,7 +3431,7 @@ public class DlgPasien extends javax.swing.JDialog {
         FormInput.add(jLabel19);
         jLabel19.setBounds(629, 12, 100, 23);
 
-        CmbStts.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "MENIKAH", "BELUM MENIKAH", "JANDA", "DUDHA" }));
+        CmbStts.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "KAWIN", "BELUM KAWIN", "CERAI HIDUP", "CERAI MATI", "KAWIN TIDAK TERCATAT" }));
         CmbStts.setLightWeightPopupEnabled(false);
         CmbStts.setName("CmbStts"); // NOI18N
         CmbStts.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -3755,10 +3755,10 @@ public class DlgPasien extends javax.swing.JDialog {
         FormInput.add(jLabel26);
         jLabel26.setBounds(4, 252, 95, 23);
 
-        jLabel27.setText("Alamat P.J. :");
+        jLabel27.setText("No. Telp. P.J. :");
         jLabel27.setName("jLabel27"); // NOI18N
         FormInput.add(jLabel27);
-        jLabel27.setBounds(402, 252, 90, 23);
+        jLabel27.setBounds(650, 340, 90, 23);
 
         AlamatPj.setText("ALAMAT");
         AlamatPj.setHighlighter(null);
@@ -4009,12 +4009,12 @@ public class DlgPasien extends javax.swing.JDialog {
         jLabel37.setText("Instansi Pasien :");
         jLabel37.setName("jLabel37"); // NOI18N
         FormInput.add(jLabel37);
-        jLabel37.setBounds(402, 342, 90, 23);
+        jLabel37.setBounds(400, 370, 90, 23);
 
         nmperusahaan.setEditable(false);
         nmperusahaan.setName("nmperusahaan"); // NOI18N
         FormInput.add(nmperusahaan);
-        nmperusahaan.setBounds(496, 342, 152, 23);
+        nmperusahaan.setBounds(490, 370, 152, 23);
 
         BtnPerusahaan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/190.png"))); // NOI18N
         BtnPerusahaan.setMnemonic('1');
@@ -4031,7 +4031,7 @@ public class DlgPasien extends javax.swing.JDialog {
             }
         });
         FormInput.add(BtnPerusahaan);
-        BtnPerusahaan.setBounds(651, 342, 28, 23);
+        BtnPerusahaan.setBounds(650, 370, 28, 23);
 
         chkTNI.setText("Anggota TNI :");
         chkTNI.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -4352,7 +4352,7 @@ public class DlgPasien extends javax.swing.JDialog {
         jLabel40.setText("NIP/NRP :");
         jLabel40.setName("jLabel40"); // NOI18N
         FormInput.add(jLabel40);
-        jLabel40.setBounds(679, 342, 70, 23);
+        jLabel40.setBounds(680, 370, 70, 23);
 
         NIP.setHighlighter(null);
         NIP.setName("NIP"); // NOI18N
@@ -4362,7 +4362,7 @@ public class DlgPasien extends javax.swing.JDialog {
             }
         });
         FormInput.add(NIP);
-        NIP.setBounds(753, 342, 120, 23);
+        NIP.setBounds(750, 370, 120, 23);
 
         ChkAlamatPJ.setBorder(null);
         ChkAlamatPJ.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
