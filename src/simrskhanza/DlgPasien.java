@@ -9728,6 +9728,19 @@ private void KabupatenMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:eve
                 }
 
                 TTmp.setText(tbPasien.getValueAt(tbPasien.getSelectedRow(),5).toString());
+                // TANGGAL LAHIR
+DTPLahir.setDate(
+    java.sql.Date.valueOf(
+        tbPasien.getValueAt(tbPasien.getSelectedRow(), 6).toString()
+    )
+);
+
+// TANGGAL DAFTAR
+DTPDaftar.setDate(
+    java.sql.Date.valueOf(
+        tbPasien.getValueAt(tbPasien.getSelectedRow(), 13).toString()
+    )
+);
                 CMbGd.setSelectedItem(tbPasien.getValueAt(tbPasien.getSelectedRow(),9).toString());
                 Pekerjaan.setText(tbPasien.getValueAt(tbPasien.getSelectedRow(),10).toString());
                 CmbStts.setSelectedItem(tbPasien.getValueAt(tbPasien.getSelectedRow(),11).toString());
