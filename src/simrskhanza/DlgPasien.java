@@ -10162,7 +10162,8 @@ private void KabupatenMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:eve
             while(rs.next()){
                 int normconv =  (int) Integer.parseInt(rs.getString(1)) + 1;
                 String norm = (String) String.valueOf(normconv);
-                String norm3 = "0"+norm;
+            //    String norm3 = "0"+norm;
+                String norm3 = norm;
                 TNo.setText(norm3);                
             }
         }
