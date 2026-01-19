@@ -1,9 +1,9 @@
 name: Build di server internal Rumah Sakit Universitas Mataram
 
 on:
-  push:
-    branches:
-      - utama
+  # push:
+  #   branches:
+  #     - utama
   workflow_dispatch:
 
 jobs:
