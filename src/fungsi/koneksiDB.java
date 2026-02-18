@@ -1695,4 +1695,14 @@ public class koneksiDB {
         }
         return var;
     }
+    
+    public static String BATASPERUBAHANDATADETIK(){
+        try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(fis);
+            var=prop.getProperty("BATASPERUBAHANDATADETIK");
+        }catch(Exception e){
+            var="172800"; 
+        }
+        return var;
+    }
 }

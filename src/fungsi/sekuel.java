@@ -50,7 +50,7 @@ import uz.ncipro.calendar.JDateTimePicker;
  */
 public final class sekuel {
     private javax.swing.ImageIcon icon = null;
-    private String folder,AKTIFKANTRACKSQL = koneksiDB.AKTIFKANTRACKSQL();
+    private String folder,AKTIFKANTRACKSQL = koneksiDB.AKTIFKANTRACKSQL(), BATASPERUBAHANDATADETIK = koneksiDB.BATASPERUBAHANDATADETIK();
     private final Connection connect=koneksiDB.condb();
     private PreparedStatement ps;
     private ResultSet rs;
@@ -1410,13 +1410,14 @@ public final class sekuel {
     
     public boolean cekTanggal48jam(String tanggalmulai,String tanggalinputdata){
         bool=false;
+        
         try {
             waktumulai = formattanggal.parse(tanggalmulai);
             kegiatan = formattanggal.parse(tanggalinputdata);
             bedawaktu = (kegiatan.getTime()-waktumulai.getTime())/1000;
-            if(bedawaktu>172800){
+            if(bedawaktu>Integer.parseInt(BATASPERUBAHANDATADETIK)){
                 bool=false;
-                JOptionPane.showMessageDialog(null,"Maaf, perubahan data / penghapusan data tidak boleh lebih dari 2 x 24 jam !");
+                JOptionPane.showMessageDialog(null,"Maaf, perubahan data / penghapusan data tidak boleh lebih dari "+(Integer.parseInt(BATASPERUBAHANDATADETIK)/3600)+" jam !");
             }else{
                 bool=true;
             }
