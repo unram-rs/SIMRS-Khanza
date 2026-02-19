@@ -50,7 +50,7 @@ import uz.ncipro.calendar.JDateTimePicker;
  */
 public final class sekuel {
     private javax.swing.ImageIcon icon = null;
-    private String folder,AKTIFKANTRACKSQL = koneksiDB.AKTIFKANTRACKSQL(), BATASPERUBAHANDATADETIK = koneksiDB.BATASPERUBAHANDATADETIK();
+    private String folder,AKTIFKANTRACKSQL = koneksiDB.AKTIFKANTRACKSQL(), BATASPERUBAHANDATADETIK = koneksiDB.BATASPERUBAHANDATADETIK(), BATASREGISTRASIDATADETIK = koneksiDB.BATASREGISTRASIDATADETIK();
     private final Connection connect=koneksiDB.condb();
     private PreparedStatement ps;
     private ResultSet rs;
@@ -1395,7 +1395,7 @@ public final class sekuel {
             waktumulai = formattanggal.parse(tanggalregistrasi);
             kegiatan = formattanggal.parse(tanggalinputdata);
             bedawaktu = (kegiatan.getTime()-waktumulai.getTime())/1000;
-            if(bedawaktu<0){
+            if(bedawaktu<Integer.parseInt(BATASREGISTRASIDATADETIK)){
                 bool=false;
                 JOptionPane.showMessageDialog(null,"Maaf, jam input data / perubahan data minimal di jam "+tanggalregistrasi+" !");
             }else{

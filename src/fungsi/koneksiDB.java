@@ -1705,4 +1705,14 @@ public class koneksiDB {
         }
         return var;
     }
+
+    public static String BATASREGISTRASIDATADETIK(){
+        try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(fis);
+            var=prop.getProperty("BATASREGISTRASIDATADETIK");
+        }catch(Exception e){
+            var="0"; 
+        }
+        return var;
+    }
 }
