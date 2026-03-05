@@ -494,6 +494,7 @@ public class DlgDaftarPermintaanResep extends javax.swing.JDialog {
         BtnInformasiObat = new widget.Button();
         BtnSEPBPJS = new widget.Button();
         BtnObat23HariBPJS = new widget.Button();
+        BtnFormPenyerahanObat = new widget.Button();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -527,7 +528,7 @@ public class DlgDaftarPermintaanResep extends javax.swing.JDialog {
         panelisi2.add(jLabel20);
 
         DTPCari1.setForeground(new java.awt.Color(50, 70, 50));
-        DTPCari1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01-09-2025" }));
+        DTPCari1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "05-03-2026" }));
         DTPCari1.setDisplayFormat("dd-MM-yyyy");
         DTPCari1.setName("DTPCari1"); // NOI18N
         DTPCari1.setOpaque(false);
@@ -541,7 +542,7 @@ public class DlgDaftarPermintaanResep extends javax.swing.JDialog {
         panelisi2.add(jLabel21);
 
         DTPCari2.setForeground(new java.awt.Color(50, 70, 50));
-        DTPCari2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01-09-2025" }));
+        DTPCari2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "05-03-2026" }));
         DTPCari2.setDisplayFormat("dd-MM-yyyy");
         DTPCari2.setName("DTPCari2"); // NOI18N
         DTPCari2.setOpaque(false);
@@ -1305,6 +1306,25 @@ public class DlgDaftarPermintaanResep extends javax.swing.JDialog {
             }
         });
         FormMenu.add(BtnObat23HariBPJS);
+
+        BtnFormPenyerahanObat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/item.png"))); // NOI18N
+        BtnFormPenyerahanObat.setActionCommand("Form Penyerahan Obat");
+        BtnFormPenyerahanObat.setFocusPainted(false);
+        BtnFormPenyerahanObat.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        BtnFormPenyerahanObat.setGlassColor(new java.awt.Color(255, 255, 255));
+        BtnFormPenyerahanObat.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        BtnFormPenyerahanObat.setLabel("Penyerahan Obat");
+        BtnFormPenyerahanObat.setMargin(new java.awt.Insets(1, 1, 1, 1));
+        BtnFormPenyerahanObat.setName("Form Penyerahan Obat"); // NOI18N
+        BtnFormPenyerahanObat.setPreferredSize(new java.awt.Dimension(135, 23));
+        BtnFormPenyerahanObat.setRoundRect(false);
+        BtnFormPenyerahanObat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnFormPenyerahanObatActionPerformed(evt);
+            }
+        });
+        FormMenu.add(BtnFormPenyerahanObat);
+        BtnFormPenyerahanObat.getAccessibleContext().setAccessibleName("Form Penyerahan Obat");
 
         ScrollMenu.setViewportView(FormMenu);
 
@@ -3220,6 +3240,12 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
         }
     }//GEN-LAST:event_BtnTelaahResepActionPerformed
 
+    private void BtnFormPenyerahanObatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnFormPenyerahanObatActionPerformed
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        Valid.panggilUrl("penyerahanresep/login.php?usere="+koneksiDB.USERHYBRIDWEB()+"&passwordte="+koneksiDB.PASHYBRIDWEB());
+        this.setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_BtnFormPenyerahanObatActionPerformed
+
     /**
     * @param args the command line arguments
     */
@@ -3240,6 +3266,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private widget.Button BtnAll;
     private widget.Button BtnCari;
     private widget.Button BtnEdit;
+    private widget.Button BtnFormPenyerahanObat;
     private widget.Button BtnHapus;
     private widget.Button BtnInformasiObat;
     private widget.Button BtnKeluar;
