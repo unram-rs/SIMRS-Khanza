@@ -43,6 +43,8 @@ public class DlgDaftarPermintaanResep extends javax.swing.JDialog {
     private sekuel Sequel=new sekuel();
     private validasi Valid=new validasi();
     private Connection koneksi=koneksiDB.condb();
+    private String keneksiPas=koneksiDB.PASHYBRIDWEB();
+    private String keneksiUser=koneksiDB.USERHYBRIDWEB();
     private PreparedStatement ps,ps2,ps3;
     private ResultSet rs,rs2,rs3;
     private String bangsal="",aktifkanparsial="no",kamar="",alarm="",DEPOAKTIFOBAT="",rincianobat="",
@@ -3242,7 +3244,8 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
 
     private void BtnFormPenyerahanObatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnFormPenyerahanObatActionPerformed
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        Valid.panggilUrl("penyerahanresep/login.php?usere="+koneksiDB.USERHYBRIDWEB()+"&passwordte="+koneksiDB.PASHYBRIDWEB());
+//        Valid.panggilUrl("penyerahanresep/login.php?usere="+koneksiDB.USERHYBRIDWEB()+"&passwordte="+koneksiDB.PASHYBRIDWEB());
+        Valid.panggilUrl("");
         this.setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_BtnFormPenyerahanObatActionPerformed
 
