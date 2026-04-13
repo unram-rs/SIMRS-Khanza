@@ -383,11 +383,11 @@ public class DlgCariPenjualan extends javax.swing.JDialog {
 
         jPopupMenu1 = new javax.swing.JPopupMenu();
         ppCetakNota = new javax.swing.JMenuItem();
-        ppHapus = new javax.swing.JMenuItem();
         ppVerif = new javax.swing.JMenuItem();
         ppResepObat = new javax.swing.JMenuItem();
         ppResepObat1 = new javax.swing.JMenuItem();
         ppResepObat2 = new javax.swing.JMenuItem();
+        ppHapus = new javax.swing.JMenuItem();
         WindowGantiCaraBayar = new javax.swing.JDialog();
         internalFrame5 = new widget.InternalFrame();
         BtnCloseIn4 = new widget.Button();
@@ -456,22 +456,6 @@ public class DlgCariPenjualan extends javax.swing.JDialog {
         });
         jPopupMenu1.add(ppCetakNota);
 
-        ppHapus.setBackground(new java.awt.Color(255, 255, 254));
-        ppHapus.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
-        ppHapus.setForeground(new java.awt.Color(50, 50, 50));
-        ppHapus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png"))); // NOI18N
-        ppHapus.setText("Hapus Penjualan");
-        ppHapus.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        ppHapus.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        ppHapus.setName("ppHapus"); // NOI18N
-        ppHapus.setPreferredSize(new java.awt.Dimension(190, 25));
-        ppHapus.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ppHapusActionPerformed(evt);
-            }
-        });
-        jPopupMenu1.add(ppHapus);
-
         ppVerif.setBackground(new java.awt.Color(255, 255, 254));
         ppVerif.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         ppVerif.setForeground(new java.awt.Color(50, 50, 50));
@@ -535,6 +519,22 @@ public class DlgCariPenjualan extends javax.swing.JDialog {
             }
         });
         jPopupMenu1.add(ppResepObat2);
+
+        ppHapus.setBackground(new java.awt.Color(255, 255, 254));
+        ppHapus.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        ppHapus.setForeground(new java.awt.Color(50, 50, 50));
+        ppHapus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png"))); // NOI18N
+        ppHapus.setText("Hapus Penjualan");
+        ppHapus.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        ppHapus.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        ppHapus.setName("ppHapus"); // NOI18N
+        ppHapus.setPreferredSize(new java.awt.Dimension(190, 25));
+        ppHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ppHapusActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(ppHapus);
 
         WindowGantiCaraBayar.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         WindowGantiCaraBayar.setName("WindowGantiCaraBayar"); // NOI18N
