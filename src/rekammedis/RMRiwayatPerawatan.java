@@ -6570,7 +6570,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                         if(rs2.next()){
                             htmlContent.append("<tr class='isi'>").
                                             append("<td valign='middle' bgcolor='#FFFFF8' align='center' width='7%'>Tanggal</td>").
-                                            append("<td valign='middle' bgcolor='#FFFFF8' align='center' width='13%'>Dokter/Paramedis</td>").
+                                            append("<td valign='middle' bgcolor='#FFFFF8' align='center' width='13%'>PPA</td>").
                                             append("<td valign='middle' bgcolor='#FFFFF8' align='center' width='14%'>Subjek</td>").
                                             append("<td valign='middle' bgcolor='#FFFFF8' align='center' width='13%'>Objek</td>").
                                             append("<td valign='middle' bgcolor='#FFFFF8' align='center' width='13%'>Asesmen</td>").
