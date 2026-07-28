@@ -19394,7 +19394,7 @@ public class DlgKamarInap extends javax.swing.JDialog {
         MnStatusRujuk.setEnabled(akses.getkamar_inap());
         MnStatusAPS.setEnabled(akses.getkamar_inap());
         MnStatusPlus.setEnabled(akses.getkamar_inap());
-        MnRanapGabung.setEnabled(akses.getkamar_inap());
+        MnRanapGabung.setEnabled(false);
         MnGabungkanRanap.setEnabled(akses.getkamar_inap());
         MnStatusMeninggal.setEnabled(akses.getkamar_inap()); 
         MnStatusSembuh.setEnabled(akses.getkamar_inap());
