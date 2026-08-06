@@ -896,6 +896,7 @@ public class DlgKamarInap extends javax.swing.JDialog {
         MnGelang3 = new javax.swing.JMenuItem();
         MnGelang4 = new javax.swing.JMenuItem();
         MnPisahRanap = new javax.swing.JMenuItem();
+        MnBatalRanap = new javax.swing.JMenuItem();
         MnRanapGabung = new javax.swing.JMenuItem();
         MnGabungkanRanap = new javax.swing.JMenuItem();
         MnDPJP = new javax.swing.JMenuItem();
@@ -4462,6 +4463,22 @@ public class DlgKamarInap extends javax.swing.JDialog {
         MnHapusData.add(MnHapusDataSalah);
 
         jPopupMenu1.add(MnHapusData);
+        
+        MnBatalRanap.setBackground(new java.awt.Color(255, 255, 254));
+        MnBatalRanap.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        MnBatalRanap.setForeground(new java.awt.Color(50, 50, 50));
+        MnBatalRanap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png"))); // NOI18N
+        MnBatalRanap.setText("Batal Ranap");
+        MnBatalRanap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        MnBatalRanap.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        MnBatalRanap.setName("MnBatalRanap"); // NOI18N
+        MnBatalRanap.setPreferredSize(new java.awt.Dimension(200, 26));
+        MnBatalRanap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MnBatalRanapActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(MnBatalRanap);
 
         jSeparator14.setBackground(new java.awt.Color(190, 220, 180));
         jSeparator14.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(190, 220, 180)));
@@ -8362,6 +8379,44 @@ public class DlgKamarInap extends javax.swing.JDialog {
         if(tbKamIn.getSelectedRow()>-1){
             tabMode.removeRow(tbKamIn.getSelectedRow()+1);
         }
+        }
+    }
+    
+    private void MnBatalRanapActionPerformed(java.awt.event.ActionEvent evt) {
+        if(tabMode.getRowCount()==0){
+            JOptionPane.showMessageDialog(null,"Maaf, data sudah habis...!!!!");
+            norawat.requestFocus();
+        }else if(norawat.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, Gagal menghapus. Pilih dulu data yang mau dihapus. Klik data pada table untuk memilih.\nUntuk menghapus pasien bayi lewat ranap gabung!!!!");
+        }else{
+            if(tbKamIn.getSelectedRow()>-1){
+                if(!(norawat.getText().trim().equals(""))){
+                    if(Sequel.cariRegistrasi(norawat.getText())>0){
+                        JOptionPane.showMessageDialog(rootPane,"Data billing sudah terverifikasi.\nSilahkan hubungi bagian kasir/keuangan ..!!");
+                        TCari.requestFocus();
+                    }else{
+                        i = JOptionPane.showConfirmDialog(rootPane,"Yakin data mau dihapus..??","Konfirmasi",JOptionPane.YES_NO_OPTION);
+                        if (i == JOptionPane.YES_OPTION) {
+                            Sequel.queryu("delete from kamar_inap where no_rawat='"+norawat.getText()+"' and kd_kamar='"+kdkamar.getText()+"' and tgl_masuk='"+TIn.getText()+"' and jam_masuk='"+JamMasuk.getText()+"'");
+                            Sequel.mengedit("kamar","kd_kamar='"+kdkamar.getText()+"'","status='KOSONG'");                
+                            if(Sequel.cariInteger("select count(kamar_inap.no_rawat) from kamar_inap where kamar_inap.no_rawat=?",norawat.getText())==0){
+                                Sequel.mengedit("reg_periksa","no_rawat='"+norawat.getText()+"'","status_lanjut='Ralan'");
+                                Sequel.mengedit("reg_periksa","no_rawat='"+norawat.getText()+"'","stts='Sudah'");
+                            }
+                            if(tabMode.getRowCount()>1){
+                                try {
+                                    if(tbKamIn.getValueAt(tbKamIn.getSelectedRow()+1,0).toString().equals("")){
+                                        tabMode.removeRow(tbKamIn.getSelectedRow()+1);
+                                    }
+                                } catch (Exception e) {
+                                }
+                            }
+                            tabMode.removeRow(tbKamIn.getSelectedRow());
+                        }
+                    }                
+                }
+                emptTeks();
+            }
         }
     }
 
@@ -18796,6 +18851,7 @@ public class DlgKamarInap extends javax.swing.JDialog {
     private javax.swing.JMenu MnRMOperasi;
     private javax.swing.JMenu MnRMRisikoJatuh;
     private javax.swing.JMenuItem MnPisahRanap;
+    private javax.swing.JMenuItem MnBatalRanap;
     private javax.swing.JMenuItem MnRanapGabung;
     private javax.swing.JMenuItem MnRawatInap;
     private javax.swing.JMenuItem MnRawatJalan;
@@ -19428,6 +19484,7 @@ public class DlgKamarInap extends javax.swing.JDialog {
         MnStatusAPS.setEnabled(akses.getkamar_inap());
         MnStatusPlus.setEnabled(akses.getkamar_inap());
         MnPisahRanap.setEnabled(akses.getkamar_inap());
+        MnBatalRanap.setEnabled(akses.getregistrasi());
         MnRanapGabung.setEnabled(false);
         MnGabungkanRanap.setEnabled(akses.getkamar_inap());
         MnStatusMeninggal.setEnabled(akses.getkamar_inap()); 
