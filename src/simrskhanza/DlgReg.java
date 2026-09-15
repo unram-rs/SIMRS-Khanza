@@ -5227,6 +5227,7 @@ public final class DlgReg extends javax.swing.JDialog {
         MnGabungNoRawat.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         MnGabungNoRawat.setName("MnGabungNoRawat"); // NOI18N
         MnGabungNoRawat.setPreferredSize(new java.awt.Dimension(190, 26));
+        MnGabungNoRawat.setEnabled(false);
         MnGabungNoRawat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 MnGabungNoRawatActionPerformed(evt);
@@ -6596,6 +6597,7 @@ public final class DlgReg extends javax.swing.JDialog {
         TDokter.setBounds(183, 102, 209, 23);
 
         TNoRw.setHighlighter(null);
+        TNoRw.setEditable(false);
         TNoRw.setName("TNoRw"); // NOI18N
         TNoRw.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -6653,6 +6655,7 @@ public final class DlgReg extends javax.swing.JDialog {
         TPngJwb.setBounds(520, 42, 150, 23);
 
         TNoRM.setHighlighter(null);
+        TNoRM.setEditable(false);
         TNoRM.setName("TNoRM"); // NOI18N
         TNoRM.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -6663,6 +6666,7 @@ public final class DlgReg extends javax.swing.JDialog {
         TNoRM.setBounds(520, 12, 110, 23);
 
         TNoReg.setHighlighter(null);
+        TNoReg.setEditable(false);
         TNoReg.setName("TNoReg"); // NOI18N
         TNoReg.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -6784,6 +6788,7 @@ public final class DlgReg extends javax.swing.JDialog {
         TBiaya.setBounds(298, 132, 94, 23);
 
         KdDokter.setHighlighter(null);
+        KdDokter.setEditable(false);
         KdDokter.setName("KdDokter"); // NOI18N
         KdDokter.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -6806,6 +6811,7 @@ public final class DlgReg extends javax.swing.JDialog {
         BtnDokter.setBounds(395, 102, 28, 23);
 
         kdpoli.setHighlighter(null);
+        kdpoli.setEditable(false);
         kdpoli.setName("kdpoli"); // NOI18N
         kdpoli.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -6900,6 +6906,7 @@ public final class DlgReg extends javax.swing.JDialog {
         jLabel31.setBounds(691, 102, 43, 23);
 
         NoKa.setHighlighter(null);
+        NoKa.setEditable(false);
         NoKa.setName("NoKa"); // NOI18N
         NoKa.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -17365,6 +17372,7 @@ private void MnLaporanRekapKunjunganBulananPoliActionPerformed(java.awt.event.Ac
         MnLayananKedokteranFisikRehabilitasi.setEnabled(akses.getlayanan_kedokteran_fisik_rehabilitasi());
         MnCheckListKesiapanAnestesi.setEnabled(akses.getchecklist_kesiapan_anestesi());
         MnCetakSuratKeteranganLayakTerbang.setEnabled(akses.getsurat_keterangan_layak_terbang());
+        TBiaya.setEditable(false);
         
         if(TANGGALMUNDUR.equals("no")){
             if(!akses.getkode().equals("Admin Utama")){
