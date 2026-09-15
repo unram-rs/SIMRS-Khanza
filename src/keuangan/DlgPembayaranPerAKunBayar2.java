@@ -45,7 +45,7 @@ public final class DlgPembayaranPerAKunBayar2 extends javax.swing.JDialog {
     private ResultSet rs,rsakunbayar;
     private double all=0,bayar=0;
     private int i,kolom=0,no=0;
-    private String status="",nopemasukanlain="",nonota="",petugas="",norawatjalan="",norawatinap="",notajual="",nodeposit="",notakesling="";
+    private String status="",nopemasukanlain="",nonota="",petugas="",norawatjalan="",norawatinap="",notajual="",nodeposit="",notakesling="",norm="",namapoli="";
     private String[] akunbayar;
     private double[] totalbayar;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -620,7 +620,9 @@ public final class DlgPembayaranPerAKunBayar2 extends javax.swing.JDialog {
                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='27px'>No.</td>").append(
                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='110px'>Tanggal</td>").append(
                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='100px'>No.Rawat/No.Nota</td>").append(
-                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='220px'>Nama Pasien</td>").append(
+                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='75px'>No. RM</td>").append(
+                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='170px'>Nama Pasien</td>").append(
+                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='130px'>Nama Poli</td>").append(
                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='80px'>Pembayaran</td>").append(
                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='130px'>Petugas</td>").append(
                 "</tr>"
@@ -694,7 +696,9 @@ public final class DlgPembayaranPerAKunBayar2 extends javax.swing.JDialog {
                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='27px'>No.</td>").append(
                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='110px'>Tanggal</td>").append(
                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='100px'>No.Rawat/No.Nota</td>").append(
-                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='220px'>Nama Pasien</td>").append(
+                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='75px'>No. RM</td>").append(
+                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='170px'>Nama Pasien</td>").append(
+                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='130px'>Nama Poli</td>").append(
                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='80px'>Pembayaran</td>").append(
                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='130px'>Petugas</td>");
             kolom=0;
@@ -726,7 +730,7 @@ public final class DlgPembayaranPerAKunBayar2 extends javax.swing.JDialog {
             );   
             
             all=0;
-            ps= koneksi.prepareStatement("select tagihan_sadewa.no_nota,tagihan_sadewa.tgl_bayar,tagihan_sadewa.nama_pasien,tagihan_sadewa.jumlah_bayar,tagihan_sadewa.petugas from tagihan_sadewa where tagihan_sadewa.tgl_bayar between ? and ? order by tagihan_sadewa.tgl_bayar,tagihan_sadewa.no_nota");
+            ps= koneksi.prepareStatement("select tagihan_sadewa.no_nota,tagihan_sadewa.no_rkm_medis,tagihan_sadewa.tgl_bayar,tagihan_sadewa.nama_pasien,tagihan_sadewa.jumlah_bayar,tagihan_sadewa.petugas from tagihan_sadewa where tagihan_sadewa.tgl_bayar between ? and ? order by tagihan_sadewa.tgl_bayar,tagihan_sadewa.no_nota");
             try {
                 ps.setString(1,Valid.SetTgl(Tgl1.getSelectedItem()+"")+" "+CmbJam.getSelectedItem()+":"+CmbMenit.getSelectedItem()+":"+CmbDetik.getSelectedItem());
                 ps.setString(2,Valid.SetTgl(Tgl2.getSelectedItem()+"")+" "+CmbJam2.getSelectedItem()+":"+CmbMenit2.getSelectedItem()+":"+CmbDetik2.getSelectedItem());
@@ -773,14 +777,59 @@ public final class DlgPembayaranPerAKunBayar2 extends javax.swing.JDialog {
                             }                                            
                         }
                     }
-                    if((status.equals(""))&&(petugas.toLowerCase().trim().contains(User.getText().toLowerCase().trim()))&&(rs.getString("nama_pasien").toLowerCase().trim().contains(TCari.getText().toLowerCase().trim())||nonota.toLowerCase().trim().contains(TCari.getText().toLowerCase().trim()))){
+
+                    norm = rs.getString("no_rkm_medis");
+                    if ((norm.equals("-") || norm.trim().isEmpty()) && (!norawatinap.equals("") || !norawatjalan.equals(""))) {
+                        norm = Sequel.cariIsi("select reg_periksa.no_rkm_medis from reg_periksa where reg_periksa.no_rawat=?", rs.getString("no_nota"));
+                    }
+                    if (norm.trim().isEmpty()) {
+                        norm = "-";
+                    }
+
+                    namapoli = "";
+                    if (!norawatinap.equals("")) {
+                        namapoli = Sequel.cariIsi("select bangsal.nm_bangsal from kamar_inap inner join kamar on kamar_inap.kd_kamar=kamar.kd_kamar inner join bangsal on kamar.kd_bangsal=bangsal.kd_bangsal where kamar_inap.no_rawat=? order by kamar_inap.tgl_masuk desc limit 1", norawatinap);
+                        if (namapoli.equals("")) {
+                            namapoli = Sequel.cariIsi("select poliklinik.nm_poli from reg_periksa inner join poliklinik on reg_periksa.kd_poli=poliklinik.kd_poli where reg_periksa.no_rawat=?", norawatinap);
+                        }
+                    } else if (!norawatjalan.equals("")) {
+                        namapoli = Sequel.cariIsi("select poliklinik.nm_poli from reg_periksa inner join poliklinik on reg_periksa.kd_poli=poliklinik.kd_poli where reg_periksa.no_rawat=?", norawatjalan);
+                    } else if (!notajual.equals("")) {
+                        namapoli = Sequel.cariIsi("select bangsal.nm_bangsal from penjualan inner join bangsal on penjualan.kd_bangsal=bangsal.kd_bangsal where penjualan.nota_jual=?", notajual);
+                        if (namapoli.equals("")) {
+                            namapoli = "Penjualan Direct";
+                        }
+                    } else if (!nodeposit.equals("")) {
+                        String norawatdep = Sequel.cariIsi("select deposit.no_rawat from deposit where deposit.no_deposit=?", nodeposit);
+                        if (!norawatdep.equals("")) {
+                            namapoli = Sequel.cariIsi("select bangsal.nm_bangsal from kamar_inap inner join kamar on kamar_inap.kd_kamar=kamar.kd_kamar inner join bangsal on kamar.kd_bangsal=bangsal.kd_bangsal where kamar_inap.no_rawat=? order by kamar_inap.tgl_masuk desc limit 1", norawatdep);
+                            if (namapoli.equals("")) {
+                                namapoli = Sequel.cariIsi("select poliklinik.nm_poli from reg_periksa inner join poliklinik on reg_periksa.kd_poli=poliklinik.kd_poli where reg_periksa.no_rawat=?", norawatdep);
+                            }
+                        }
+                        if (namapoli.equals("")) {
+                            namapoli = "Deposit Pasien";
+                        }
+                    } else if (!nopemasukanlain.equals("")) {
+                        namapoli = "Pemasukan Lain";
+                    } else if (!notakesling.equals("")) {
+                        namapoli = "Lab Kesling";
+                    }
+
+                    if (namapoli.trim().isEmpty()) {
+                        namapoli = "-";
+                    }
+
+                    if((status.equals(""))&&(petugas.toLowerCase().trim().contains(User.getText().toLowerCase().trim()))&&(rs.getString("nama_pasien").toLowerCase().trim().contains(TCari.getText().toLowerCase().trim())||nonota.toLowerCase().trim().contains(TCari.getText().toLowerCase().trim())||norm.toLowerCase().trim().contains(TCari.getText().toLowerCase().trim())||namapoli.toLowerCase().trim().contains(TCari.getText().toLowerCase().trim()))){
                         all=all+rs.getDouble("jumlah_bayar");
                         htmlContent.append(                             
                             "<tr class='isi'>").append(
                                 "<td valign='middle' align='center'>").append(no).append("</td>").append(
                                 "<td valign='middle' align='center'>").append(rs.getString("tgl_bayar")).append("</td>").append(
                                 "<td valign='middle' align='center'>").append(nonota).append("</td>").append(
+                                "<td valign='middle' align='center'>").append(norm).append("</td>").append(
                                 "<td valign='middle' align='left'>").append(rs.getString("nama_pasien")).append("</td>").append(
+                                "<td valign='middle' align='left'>").append(namapoli).append("</td>").append(
                                 "<td valign='middle' align='right'>").append(Valid.SetAngka(rs.getDouble("jumlah_bayar"))).append("</td>").append(
                                 "<td valign='middle' align='left'>").append(petugas).append("</td>");
                         for(i=0;i<kolom;i++){
@@ -831,6 +880,8 @@ public final class DlgPembayaranPerAKunBayar2 extends javax.swing.JDialog {
                     "<td valign='middle' align='center'></td>").append(
                     "<td valign='middle' align='right'>Total :</td>").append(
                     "<td valign='middle' align='center'></td>").append(
+                    "<td valign='middle' align='center'></td>").append(
+                    "<td valign='middle' align='left'></td>").append(
                     "<td valign='middle' align='left'></td>").append(
                     "<td valign='middle' align='right'>").append(Valid.SetAngka(all)).append("</td>").append(
                     "<td valign='middle' align='left'></td>");
@@ -850,7 +901,7 @@ public final class DlgPembayaranPerAKunBayar2 extends javax.swing.JDialog {
             }else if(kolom>0){
                 LoadHTML.setText(
                         "<html>"+
-                          "<table width='"+Integer.toString(700+(kolom*90))+"px' border='0' align='left' cellpadding='3px' cellspacing='0' class='tbl_form'>"+
+                          "<table width='"+Integer.toString(900+(kolom*90))+"px' border='0' align='left' cellpadding='3px' cellspacing='0' class='tbl_form'>"+
                            htmlContent.toString()+
                           "</table>"+
                         "</html>");
@@ -871,7 +922,9 @@ public final class DlgPembayaranPerAKunBayar2 extends javax.swing.JDialog {
                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='27px'>No.</td>").append(
                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='110px'>Tanggal</td>").append(
                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='100px'>No.Rawat/No.Nota</td>").append(
-                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='220px'>Nama Pasien</td>").append(
+                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='75px'>No. RM</td>").append(
+                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='170px'>Nama Pasien</td>").append(
+                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='130px'>Nama Poli</td>").append(
                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='80px'>Pembayaran</td>").append(
                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='130px'>Petugas</td>");
             kolom=0;
@@ -903,7 +956,7 @@ public final class DlgPembayaranPerAKunBayar2 extends javax.swing.JDialog {
             );   
             
             all=0;
-            ps= koneksi.prepareStatement("select tagihan_sadewa.no_nota,tagihan_sadewa.tgl_bayar,tagihan_sadewa.nama_pasien,tagihan_sadewa.jumlah_bayar,tagihan_sadewa.petugas from tagihan_sadewa where tagihan_sadewa.tgl_bayar between ? and ? order by tagihan_sadewa.tgl_bayar,tagihan_sadewa.no_nota");
+            ps= koneksi.prepareStatement("select tagihan_sadewa.no_nota,tagihan_sadewa.no_rkm_medis,tagihan_sadewa.tgl_bayar,tagihan_sadewa.nama_pasien,tagihan_sadewa.jumlah_bayar,tagihan_sadewa.petugas from tagihan_sadewa where tagihan_sadewa.tgl_bayar between ? and ? order by tagihan_sadewa.tgl_bayar,tagihan_sadewa.no_nota");
             try {
                 ps.setString(1,Valid.SetTgl(Tgl1.getSelectedItem()+"")+" "+CmbJam.getSelectedItem()+":"+CmbMenit.getSelectedItem()+":"+CmbDetik.getSelectedItem());
                 ps.setString(2,Valid.SetTgl(Tgl2.getSelectedItem()+"")+" "+CmbJam2.getSelectedItem()+":"+CmbMenit2.getSelectedItem()+":"+CmbDetik2.getSelectedItem());
@@ -950,14 +1003,59 @@ public final class DlgPembayaranPerAKunBayar2 extends javax.swing.JDialog {
                             }                                            
                         }
                     }
-                    if((status.equals(""))&&(petugas.toLowerCase().trim().contains(User.getText().toLowerCase().trim()))&&(rs.getString("nama_pasien").toLowerCase().trim().contains(TCari.getText().toLowerCase().trim())||nonota.toLowerCase().trim().contains(TCari.getText().toLowerCase().trim()))){
+
+                    norm = rs.getString("no_rkm_medis");
+                    if ((norm.equals("-") || norm.trim().isEmpty()) && (!norawatinap.equals("") || !norawatjalan.equals(""))) {
+                        norm = Sequel.cariIsi("select reg_periksa.no_rkm_medis from reg_periksa where reg_periksa.no_rawat=?", rs.getString("no_nota"));
+                    }
+                    if (norm.trim().isEmpty()) {
+                        norm = "-";
+                    }
+
+                    namapoli = "";
+                    if (!norawatinap.equals("")) {
+                        namapoli = Sequel.cariIsi("select bangsal.nm_bangsal from kamar_inap inner join kamar on kamar_inap.kd_kamar=kamar.kd_kamar inner join bangsal on kamar.kd_bangsal=bangsal.kd_bangsal where kamar_inap.no_rawat=? order by kamar_inap.tgl_masuk desc limit 1", norawatinap);
+                        if (namapoli.equals("")) {
+                            namapoli = Sequel.cariIsi("select poliklinik.nm_poli from reg_periksa inner join poliklinik on reg_periksa.kd_poli=poliklinik.kd_poli where reg_periksa.no_rawat=?", norawatinap);
+                        }
+                    } else if (!norawatjalan.equals("")) {
+                        namapoli = Sequel.cariIsi("select poliklinik.nm_poli from reg_periksa inner join poliklinik on reg_periksa.kd_poli=poliklinik.kd_poli where reg_periksa.no_rawat=?", norawatjalan);
+                    } else if (!notajual.equals("")) {
+                        namapoli = Sequel.cariIsi("select bangsal.nm_bangsal from penjualan inner join bangsal on penjualan.kd_bangsal=bangsal.kd_bangsal where penjualan.nota_jual=?", notajual);
+                        if (namapoli.equals("")) {
+                            namapoli = "Penjualan Direct";
+                        }
+                    } else if (!nodeposit.equals("")) {
+                        String norawatdep = Sequel.cariIsi("select deposit.no_rawat from deposit where deposit.no_deposit=?", nodeposit);
+                        if (!norawatdep.equals("")) {
+                            namapoli = Sequel.cariIsi("select bangsal.nm_bangsal from kamar_inap inner join kamar on kamar_inap.kd_kamar=kamar.kd_kamar inner join bangsal on kamar.kd_bangsal=bangsal.kd_bangsal where kamar_inap.no_rawat=? order by kamar_inap.tgl_masuk desc limit 1", norawatdep);
+                            if (namapoli.equals("")) {
+                                namapoli = Sequel.cariIsi("select poliklinik.nm_poli from reg_periksa inner join poliklinik on reg_periksa.kd_poli=poliklinik.kd_poli where reg_periksa.no_rawat=?", norawatdep);
+                            }
+                        }
+                        if (namapoli.equals("")) {
+                            namapoli = "Deposit Pasien";
+                        }
+                    } else if (!nopemasukanlain.equals("")) {
+                        namapoli = "Pemasukan Lain";
+                    } else if (!notakesling.equals("")) {
+                        namapoli = "Lab Kesling";
+                    }
+
+                    if (namapoli.trim().isEmpty()) {
+                        namapoli = "-";
+                    }
+
+                    if((status.equals(""))&&(petugas.toLowerCase().trim().contains(User.getText().toLowerCase().trim()))&&(rs.getString("nama_pasien").toLowerCase().trim().contains(TCari.getText().toLowerCase().trim())||nonota.toLowerCase().trim().contains(TCari.getText().toLowerCase().trim())||norm.toLowerCase().trim().contains(TCari.getText().toLowerCase().trim())||namapoli.toLowerCase().trim().contains(TCari.getText().toLowerCase().trim()))){
                         all=all+rs.getDouble("jumlah_bayar");
                         htmlContent.append(                             
                             "<tr class='isi'>").append(
                                 "<td valign='middle' align='center'>").append(no).append("</td>").append(
                                 "<td valign='middle' align='center'>").append(rs.getString("tgl_bayar")).append("</td>").append(
                                 "<td valign='middle' align='center'>").append(nonota).append("</td>").append(
+                                "<td valign='middle' align='center'>").append(norm).append("</td>").append(
                                 "<td valign='middle' align='left'>").append(rs.getString("nama_pasien")).append("</td>").append(
+                                "<td valign='middle' align='left'>").append(namapoli).append("</td>").append(
                                 "<td valign='middle' align='right'>").append(Math.round(rs.getDouble("jumlah_bayar"))).append("</td>").append(
                                 "<td valign='middle' align='left'>").append(petugas).append("</td>");
                         for(i=0;i<kolom;i++){
@@ -1008,6 +1106,8 @@ public final class DlgPembayaranPerAKunBayar2 extends javax.swing.JDialog {
                     "<td valign='middle' align='center'></td>").append(
                     "<td valign='middle' align='right'>Total :</td>").append(
                     "<td valign='middle' align='center'></td>").append(
+                    "<td valign='middle' align='center'></td>").append(
+                    "<td valign='middle' align='left'></td>").append(
                     "<td valign='middle' align='left'></td>").append(
                     "<td valign='middle' align='right'>").append(Math.round(all)).append("</td>").append(
                     "<td valign='middle' align='left'></td>");
@@ -1018,16 +1118,16 @@ public final class DlgPembayaranPerAKunBayar2 extends javax.swing.JDialog {
                 "</tr>"
             );            
             if(kolom==0){
-                LoadHTML.setText(
+                LoadHTML2.setText(
                         "<html>"+
                           "<table width='100%' border='0' align='left' cellpadding='3px' cellspacing='0' class='tbl_form'>"+
                            htmlContent.toString()+
                           "</table>"+
                         "</html>");
             }else if(kolom>0){
-                LoadHTML.setText(
+                LoadHTML2.setText(
                         "<html>"+
-                          "<table width='"+Integer.toString(700+(kolom*90))+"px' border='0' align='left' cellpadding='3px' cellspacing='0' class='tbl_form'>"+
+                          "<table width='"+Integer.toString(900+(kolom*90))+"px' border='0' align='left' cellpadding='3px' cellspacing='0' class='tbl_form'>"+
                            htmlContent.toString()+
                           "</table>"+
                         "</html>");
