@@ -54,7 +54,7 @@ public final class DlgStatusDataRM extends javax.swing.JDialog {
     private int i=0,adasoapiralan=0,tidakadasoapiralan=0,adasoapiranap=0,tidakadasoapiranap=0,adaresumeralan=0,tidakadaresumeralan=0,
             adaresumeranap=0,tidakadaresumeranap=0,adatriaseigd=0,tidakadatriaseigd=0,adaaskepigd=0,tidakadaaskepigd=0,adaicd10=0,tidakadaicd10=0,
             adaicd9=0,tidakadaicd9=0;  
-    private String soapiralan="",soapiranap="",resumeralan="",resumeranap="",pilihan="",triaseigd="",askepigd="",icd10="",icd9="";
+    private String soapiralan="",soapiranap="",resumeralan="",resumeranap="",pilihan="",triaseigd="",askepigd="",icd10="",icd9="",statuspulang="",dokterdpjp="";
     private StringBuilder htmlContent;
     /** Creates new form DlgLhtBiaya
      * @param parent
@@ -66,7 +66,7 @@ public final class DlgStatusDataRM extends javax.swing.JDialog {
         setSize(885,674);
 
         tabMode=new DefaultTableModel(null,new Object[]{
-            "No.Rawat","Tanggal","Dokter Dituju","Nomer RM","Pasien","Poliklinik","Status","SOAPI Ralan","SOAPI Ranap","Resume Ralan","Resume Ranap","Triase IGD","Askep IGD","ICD 10","ICD 9"
+            "No.Rawat","Tanggal","Dokter Dituju","Dokter DPJP Ranap","Nomer RM","Pasien","Poliklinik","Status","SOAPI Ralan","SOAPI Ranap","Resume Ralan","Resume Ranap","Triase IGD","Askep IGD","ICD 10","ICD 9","Status Pulang"
         }){
              @Override public boolean isCellEditable(int rowIndex, int colIndex){return false;}
         };
@@ -75,7 +75,7 @@ public final class DlgStatusDataRM extends javax.swing.JDialog {
         tbBangsal.setPreferredScrollableViewportSize(new Dimension(800,800));
         tbBangsal.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        for (i = 0; i < 15; i++) {
+        for (i = 0; i < 17; i++) {
             TableColumn column = tbBangsal.getColumnModel().getColumn(i);
             if(i==0){
                 column.setPreferredWidth(105);
@@ -84,32 +84,68 @@ public final class DlgStatusDataRM extends javax.swing.JDialog {
             }else if(i==2){
                 column.setPreferredWidth(150);
             }else if(i==3){
-                column.setPreferredWidth(65);
+                column.setPreferredWidth(150);
             }else if(i==4){
-                column.setPreferredWidth(150);   
+                column.setPreferredWidth(65);
             }else if(i==5){
-                column.setPreferredWidth(130);
+                column.setPreferredWidth(150);   
             }else if(i==6){
-                column.setPreferredWidth(43);
+                column.setPreferredWidth(130);
             }else if(i==7){
-                column.setPreferredWidth(70);
+                column.setPreferredWidth(43);
             }else if(i==8){
-                column.setPreferredWidth(75);
+                column.setPreferredWidth(70);
             }else if(i==9){
-                column.setPreferredWidth(78);
+                column.setPreferredWidth(75);
             }else if(i==10){
-                column.setPreferredWidth(80);
+                column.setPreferredWidth(78);
             }else if(i==11){
-                column.setPreferredWidth(64);
+                column.setPreferredWidth(80);
             }else if(i==12){
                 column.setPreferredWidth(64);
             }else if(i==13){
-                column.setPreferredWidth(54);
+                column.setPreferredWidth(64);
             }else if(i==14){
                 column.setPreferredWidth(54);
+            }else if(i==15){
+                column.setPreferredWidth(54);
+            }else if(i==16){
+                column.setPreferredWidth(90);
             }
         }
-        tbBangsal.setDefaultRenderer(Object.class, new WarnaTable());
+        tbBangsal.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
+            private final java.awt.Color HIJAU      = new java.awt.Color(198, 239, 206);
+            private final java.awt.Color MERAH      = new java.awt.Color(255, 199, 206);
+            private final java.awt.Color GANJIL     = new java.awt.Color(255, 244, 244);
+            private final java.awt.Color GENAP      = new java.awt.Color(255, 255, 255);
+            private final java.awt.Color SEL_HIJAU  = new java.awt.Color(0, 128, 64);
+            private final java.awt.Color SEL_MERAH  = new java.awt.Color(192, 0, 0);
+            @Override
+            public java.awt.Component getTableCellRendererComponent(
+                    javax.swing.JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+                java.awt.Component c = super.getTableCellRendererComponent(
+                        table, value, isSelected, hasFocus, row, column);
+                String val = value == null ? "" : value.toString().trim();
+                // Kolom status (8=SOAPI Ralan s.d. 16=Status Pulang)
+                if (column >= 8 && column <= 16) {
+                    if (val.equals("Ada")) {
+                        c.setBackground(isSelected ? SEL_HIJAU : HIJAU);
+                        c.setForeground(isSelected ? java.awt.Color.WHITE : new java.awt.Color(0, 97, 0));
+                    } else if (val.equals("Tidak Ada") || val.equals("Belum Pulang")) {
+                        c.setBackground(isSelected ? SEL_MERAH : MERAH);
+                        c.setForeground(isSelected ? java.awt.Color.WHITE : new java.awt.Color(156, 0, 6));
+                    } else {
+                        c.setBackground(isSelected ? table.getSelectionBackground() : (row % 2 == 1 ? GANJIL : GENAP));
+                        c.setForeground(isSelected ? table.getSelectionForeground() : java.awt.Color.DARK_GRAY);
+                    }
+                } else {
+                    c.setBackground(isSelected ? table.getSelectionBackground() : (row % 2 == 1 ? GANJIL : GENAP));
+                    c.setForeground(isSelected ? table.getSelectionForeground() : java.awt.Color.DARK_GRAY);
+                }
+                return c;
+            }
+        });
         
         TCari.setDocument(new batasInput((int)90).getKata(TCari));
         if(koneksiDB.CARICEPAT().equals("aktif")){
@@ -552,6 +588,7 @@ public final class DlgStatusDataRM extends javax.swing.JDialog {
                                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='105px'>No.Rawat</td>"+
                                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='65px'>Tanggal</td>"+
                                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='150px'>Dokter Dituju</td>"+
+                                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='150px'>Dokter DPJP Ranap</td>"+
                                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='65px'>Nomer RM</td>"+
                                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='150px'>Pasien</td>"+
                                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='130px'>Poliklinik</td>"+
@@ -564,6 +601,7 @@ public final class DlgStatusDataRM extends javax.swing.JDialog {
                                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='70px'>Askep IGD</td>"+
                                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='54px'>ICD 10</td>"+
                                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='54px'>ICD 9</td>"+
+                                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='90px'>Status Pulang</td>"+
                                 "</tr>"
                             ); 
                             for(i=0;i<tabMode.getRowCount();i++){  
@@ -575,7 +613,7 @@ public final class DlgStatusDataRM extends javax.swing.JDialog {
                                         "<td valign='top'>"+tabMode.getValueAt(i,3)+"</td>"+
                                         "<td valign='top'>"+tabMode.getValueAt(i,4)+"</td>"+
                                         "<td valign='top'>"+tabMode.getValueAt(i,5)+"</td>"+
-                                        "<td valign='top' align='center'>"+tabMode.getValueAt(i,6)+"</td>"+
+                                        "<td valign='top'>"+tabMode.getValueAt(i,6)+"</td>"+
                                         "<td valign='top' align='center'>"+tabMode.getValueAt(i,7)+"</td>"+
                                         "<td valign='top' align='center'>"+tabMode.getValueAt(i,8)+"</td>"+
                                         "<td valign='top' align='center'>"+tabMode.getValueAt(i,9)+"</td>"+
@@ -584,6 +622,8 @@ public final class DlgStatusDataRM extends javax.swing.JDialog {
                                         "<td valign='top' align='center'>"+tabMode.getValueAt(i,12)+"</td>"+
                                         "<td valign='top' align='center'>"+tabMode.getValueAt(i,13)+"</td>"+
                                         "<td valign='top' align='center'>"+tabMode.getValueAt(i,14)+"</td>"+
+                                        "<td valign='top' align='center'>"+tabMode.getValueAt(i,15)+"</td>"+
+                                        "<td valign='top' align='center'>"+tabMode.getValueAt(i,16)+"</td>"+
                                     "</tr>"
                                 ); 
                             }            
@@ -620,6 +660,7 @@ public final class DlgStatusDataRM extends javax.swing.JDialog {
                                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='105px'>No.Rawat</td>"+
                                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='65px'>Tanggal</td>"+
                                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='150px'>Dokter Dituju</td>"+
+                                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='150px'>Dokter DPJP Ranap</td>"+
                                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='65px'>Nomer RM</td>"+
                                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='150px'>Pasien</td>"+
                                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='130px'>Poliklinik</td>"+
@@ -632,6 +673,7 @@ public final class DlgStatusDataRM extends javax.swing.JDialog {
                                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='70px'>Askep IGD</td>"+
                                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='54px'>ICD 10</td>"+
                                     "<td valign='middle' bgcolor='#FFFAFA' align='center' width='54px'>ICD 9</td>"+
+                                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='90px'>Status Pulang</td>"+
                                 "</tr>"
                             ); 
                             for(i=0;i<tabMode.getRowCount();i++){  
@@ -643,7 +685,7 @@ public final class DlgStatusDataRM extends javax.swing.JDialog {
                                         "<td valign='top'>"+tabMode.getValueAt(i,3)+"</td>"+
                                         "<td valign='top'>"+tabMode.getValueAt(i,4)+"</td>"+
                                         "<td valign='top'>"+tabMode.getValueAt(i,5)+"</td>"+
-                                        "<td valign='top' align='center'>"+tabMode.getValueAt(i,6)+"</td>"+
+                                        "<td valign='top'>"+tabMode.getValueAt(i,6)+"</td>"+
                                         "<td valign='top' align='center'>"+tabMode.getValueAt(i,7)+"</td>"+
                                         "<td valign='top' align='center'>"+tabMode.getValueAt(i,8)+"</td>"+
                                         "<td valign='top' align='center'>"+tabMode.getValueAt(i,9)+"</td>"+
@@ -652,6 +694,8 @@ public final class DlgStatusDataRM extends javax.swing.JDialog {
                                         "<td valign='top' align='center'>"+tabMode.getValueAt(i,12)+"</td>"+
                                         "<td valign='top' align='center'>"+tabMode.getValueAt(i,13)+"</td>"+
                                         "<td valign='top' align='center'>"+tabMode.getValueAt(i,14)+"</td>"+
+                                        "<td valign='top' align='center'>"+tabMode.getValueAt(i,15)+"</td>"+
+                                        "<td valign='top' align='center'>"+tabMode.getValueAt(i,16)+"</td>"+
                                     "</tr>"
                                 ); 
                             }            
@@ -684,13 +728,13 @@ public final class DlgStatusDataRM extends javax.swing.JDialog {
                     case "Laporan 3 (CSV)":
                             htmlContent = new StringBuilder();
                             htmlContent.append(                             
-                                "\"No.Rawat\";\"Tanggal\";\"Dokter Dituju\";\"Nomer RM\";\"Pasien\";\"Poliklinik\";\"Status\";\"SOAPI Ralan\";\"SOAPI Ranap\";\"Resume Ralan\";\"Resume Ranap\";\"Triase IGD\";\"Askep IGD\";\"ICD 10\";\"ICD 9\"\n"
+                                "\"No.Rawat\";\"Tanggal\";\"Dokter Dituju\";\"Dokter DPJP Ranap\";\"Nomer RM\";\"Pasien\";\"Poliklinik\";\"Status\";\"SOAPI Ralan\";\"SOAPI Ranap\";\"Resume Ralan\";\"Resume Ranap\";\"Triase IGD\";\"Askep IGD\";\"ICD 10\";\"ICD 9\";\"Status Pulang\"\n"
                             ); 
                             for(i=0;i<tabMode.getRowCount();i++){  
                                 htmlContent.append(                             
                                     "\""+tabMode.getValueAt(i,0)+"\";\""+tabMode.getValueAt(i,1)+"\";\""+tabMode.getValueAt(i,2)+"\";\""+tabMode.getValueAt(i,3)+"\";\""+tabMode.getValueAt(i,4)+"\";"+
                                     "\""+tabMode.getValueAt(i,5)+"\";\""+tabMode.getValueAt(i,6)+"\";\""+tabMode.getValueAt(i,7)+"\";\""+tabMode.getValueAt(i,8)+"\";\""+tabMode.getValueAt(i,9)+"\";"+
-                                    "\""+tabMode.getValueAt(i,10)+"\";\""+tabMode.getValueAt(i,11)+"\";\""+tabMode.getValueAt(i,12)+"\";\""+tabMode.getValueAt(i,13)+"\";\""+tabMode.getValueAt(i,14)+"\"\n"
+                                    "\""+tabMode.getValueAt(i,10)+"\";\""+tabMode.getValueAt(i,11)+"\";\""+tabMode.getValueAt(i,12)+"\";\""+tabMode.getValueAt(i,13)+"\";\""+tabMode.getValueAt(i,14)+"\";\""+tabMode.getValueAt(i,15)+"\";\""+tabMode.getValueAt(i,16)+"\"\n"
                                 ); 
                             }            
 
@@ -983,17 +1027,25 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     }else{
                         tidakadaicd9++;
                     }
+                    if(rs.getString("status_lanjut").equalsIgnoreCase("Ranap")){
+                        statuspulang=Sequel.cariIsi("select if(stts_pulang is null or stts_pulang='-','Belum Pulang',stts_pulang) from kamar_inap where no_rawat=? order by tgl_masuk desc limit 1",rs.getString("no_rawat"));
+                        dokterdpjp=Sequel.cariIsi("select dokter.nm_dokter from dpjp_ranap inner join dokter on dpjp_ranap.kd_dokter=dokter.kd_dokter where dpjp_ranap.no_rawat=?",rs.getString("no_rawat"));
+                        if(dokterdpjp.equals("")) dokterdpjp="-";
+                    }else{
+                        statuspulang="-";
+                        dokterdpjp="-";
+                    }
                     tabMode.addRow(new Object[]{
-                        rs.getString("no_rawat"),rs.getString("tgl_registrasi"),rs.getString("nm_dokter"),rs.getString("no_rkm_medis"),rs.getString("nm_pasien"),rs.getString("nm_poli"),rs.getString("status_lanjut"),
-                        soapiralan,soapiranap,resumeralan,resumeranap,triaseigd,askepigd,icd10,icd9
+                        rs.getString("no_rawat"),rs.getString("tgl_registrasi"),rs.getString("nm_dokter"),dokterdpjp,rs.getString("no_rkm_medis"),rs.getString("nm_pasien"),rs.getString("nm_poli"),rs.getString("status_lanjut"),
+                        soapiralan,soapiranap,resumeralan,resumeranap,triaseigd,askepigd,icd10,icd9,statuspulang
                     });                    
                 }
                 if(tabMode.getRowCount()>0){
                     tabMode.addRow(new Object[]{
-                        "","","","","","Status Data Ada",":",adasoapiralan,adasoapiranap,adaresumeralan,adaresumeranap,adatriaseigd,adaaskepigd,adaicd10,adaicd9
+                        "","","","","","","Status Data Ada",":",adasoapiralan,adasoapiranap,adaresumeralan,adaresumeranap,adatriaseigd,adaaskepigd,adaicd10,adaicd9,""
                     });
                     tabMode.addRow(new Object[]{
-                        "","","","","","Status Data Tidak Ada",":",tidakadasoapiralan,tidakadasoapiranap,tidakadaresumeralan,tidakadaresumeranap,tidakadatriaseigd,tidakadaaskepigd,tidakadaicd10,tidakadaicd9
+                        "","","","","","","Status Data Tidak Ada",":",tidakadasoapiralan,tidakadasoapiranap,tidakadaresumeralan,tidakadaresumeranap,tidakadatriaseigd,tidakadaaskepigd,tidakadaicd10,tidakadaicd9,""
                     });
                 }   
             } catch (Exception e) {
