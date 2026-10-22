@@ -971,7 +971,8 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 "concat(reg_periksa.kd_poli,poliklinik.nm_poli) like ? and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? "+
                 "and reg_periksa.tgl_registrasi between ? and ? and reg_periksa.status_lanjut like ? "+
                 (TCari.getText().equals("")?"":"and (reg_periksa.no_rawat like ? or dokter.nm_dokter like ? or reg_periksa.no_rkm_medis like ? or "+
-                "pasien.nm_pasien like ? or poliklinik.nm_poli like ? or penjab.png_jawab like ?) ")+"order by reg_periksa.tgl_registrasi");
+                "pasien.nm_pasien like ? or poliklinik.nm_poli like ? or penjab.png_jawab like ? or "+
+                "exists(select 1 from dpjp_ranap inner join dokter d2 on dpjp_ranap.kd_dokter=d2.kd_dokter where dpjp_ranap.no_rawat=reg_periksa.no_rawat and d2.nm_dokter like ?)) ")+"order by reg_periksa.tgl_registrasi");
             try {
                 ps.setString(1,"%"+kdpoli.getText()+nmpoli.getText()+"%");
                 ps.setString(2,"%"+kdpenjab.getText()+nmpenjab.getText()+"%");
@@ -985,6 +986,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     ps.setString(9,"%"+TCari.getText().trim()+"%");
                     ps.setString(10,"%"+TCari.getText().trim()+"%");
                     ps.setString(11,"%"+TCari.getText().trim()+"%");
+                    ps.setString(12,"%"+TCari.getText().trim()+"%");
                 }
                     
                 rs=ps.executeQuery();
