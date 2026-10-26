@@ -37,6 +37,19 @@ public class WarnaTableKasirRalan extends DefaultTableCellRenderer {
             component.setBackground(new Color(119,221,119));
             component.setForeground(new Color(245,255,245));
         }
+        // Warna biru jika pasien sudah memiliki resume medis (kolom 20 = ada_resume)
+        // Prioritas 2: mengalahkan semua warna status, hanya dikalahkan oleh Sudah Bayar
+        try {
+            Object resumeVal = table.getModel().getValueAt(row, 20);
+            if (resumeVal != null && "1".equals(resumeVal.toString())) {
+                if (row % 2 == 1) {
+                    component.setBackground(new Color(173,216,230));
+                } else {
+                    component.setBackground(new Color(135,206,250));
+                }
+                component.setForeground(new Color(0,50,100));
+            }
+        } catch (Exception ignored) {}
         if(table.getValueAt(row,15).toString().equals("Sudah Bayar")){
             component.setBackground(new Color(50,50,50));
             component.setForeground(new Color(255,255,255));
