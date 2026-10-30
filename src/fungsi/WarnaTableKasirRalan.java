@@ -42,11 +42,11 @@ public class WarnaTableKasirRalan extends DefaultTableCellRenderer {
         try {
             Object resumeVal = table.getModel().getValueAt(row, 20);
             if (resumeVal != null && "1".equals(resumeVal.toString())) {
-                if (row % 2 == 1) {
-                    component.setBackground(new Color(173,216,230));
-                } else {
+//                if (row % 2 == 1) {
+//                    component.setBackground(new Color(173,216,230));
+//                } else {
                     component.setBackground(new Color(135,206,250));
-                }
+//                }
                 component.setForeground(new Color(0,50,100));
             }
         } catch (Exception ignored) {}
