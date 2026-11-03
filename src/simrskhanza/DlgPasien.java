@@ -578,7 +578,7 @@ public class DlgPasien extends javax.swing.JDialog {
                 if(akses.getform().equals("DlgPasien")){
                     if(perusahaan.getTable().getSelectedRow()!= -1){
                         kdperusahaan.setText(perusahaan.getTable().getValueAt(perusahaan.getTable().getSelectedRow(),0).toString());
-                        nmperusahaan.setText(perusahaan.getTable().getValueAt(perusahaan.getTable().getSelectedRow(),1).toString());
+                        EmailPj.setText(perusahaan.getTable().getValueAt(perusahaan.getTable().getSelectedRow(),1).toString());
                     }  
                     kdperusahaan.requestFocus();
                 }
@@ -1785,7 +1785,7 @@ public class DlgPasien extends javax.swing.JDialog {
         BtnBahasa = new widget.Button();
         jLabel36 = new widget.Label();
         jLabel37 = new widget.Label();
-        nmperusahaan = new widget.TextBox();
+        EmailPj = new widget.TextBox();
         BtnPerusahaan = new widget.Button();
         chkTNI = new widget.CekBox();
         LabelGolonganTNI = new widget.Label();
@@ -1826,8 +1826,8 @@ public class DlgPasien extends javax.swing.JDialog {
         NIP = new widget.TextBox();
         ChkAlamatPJ = new widget.CekBox();
         CmbKeluarga = new widget.ComboBox();
+        nmperusahaan1 = new widget.TextBox();
         NoTelpPj = new widget.TextBox();
-        EmailPj = new widget.TextBox();
         jLabel43 = new widget.Label();
         jLabel44 = new widget.Label();
         internalFrame4 = new widget.InternalFrame();
@@ -3393,7 +3393,7 @@ public class DlgPasien extends javax.swing.JDialog {
         FormInput.add(jLabel13);
         jLabel13.setBounds(4, 102, 95, 23);
 
-        DTPLahir.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "04-06-2025" }));
+        DTPLahir.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "03-11-2026" }));
         DTPLahir.setDisplayFormat("dd-MM-yyyy");
         DTPLahir.setName("DTPLahir"); // NOI18N
         DTPLahir.setOpaque(false);
@@ -3431,7 +3431,7 @@ public class DlgPasien extends javax.swing.JDialog {
         FormInput.add(jLabel19);
         jLabel19.setBounds(629, 12, 100, 23);
 
-        CmbStts.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "KAWIN", "BELUM KAWIN", "CERAI HIDUP", "CERAI MATI", "KAWIN TIDAK TERCATAT" }));
+        CmbStts.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "MENIKAH", "BELUM MENIKAH", "JANDA", "DUDHA" }));
         CmbStts.setLightWeightPopupEnabled(false);
         CmbStts.setName("CmbStts"); // NOI18N
         CmbStts.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -3525,7 +3525,7 @@ public class DlgPasien extends javax.swing.JDialog {
         FormInput.add(TKtp);
         TKtp.setBounds(743, 132, 130, 23);
 
-        DTPDaftar.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "04-06-2025" }));
+        DTPDaftar.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "03-11-2026" }));
         DTPDaftar.setDisplayFormat("dd-MM-yyyy");
         DTPDaftar.setName("DTPDaftar"); // NOI18N
         DTPDaftar.setOpaque(false);
@@ -3755,10 +3755,10 @@ public class DlgPasien extends javax.swing.JDialog {
         FormInput.add(jLabel26);
         jLabel26.setBounds(4, 252, 95, 23);
 
-        jLabel27.setText("No. Telp. P.J. :");
+        jLabel27.setText("Alamat P.J. :");
         jLabel27.setName("jLabel27"); // NOI18N
         FormInput.add(jLabel27);
-        jLabel27.setBounds(650, 340, 90, 23);
+        jLabel27.setBounds(402, 252, 90, 23);
 
         AlamatPj.setText("ALAMAT");
         AlamatPj.setHighlighter(null);
@@ -4006,15 +4006,15 @@ public class DlgPasien extends javax.swing.JDialog {
         FormInput.add(jLabel36);
         jLabel36.setBounds(4, 312, 95, 23);
 
-        jLabel37.setText("Instansi Pasien :");
+        jLabel37.setText("Email PJ :");
         jLabel37.setName("jLabel37"); // NOI18N
         FormInput.add(jLabel37);
-        jLabel37.setBounds(400, 370, 90, 23);
+        jLabel37.setBounds(660, 340, 50, 23);
 
-        nmperusahaan.setEditable(false);
-        nmperusahaan.setName("nmperusahaan"); // NOI18N
-        FormInput.add(nmperusahaan);
-        nmperusahaan.setBounds(490, 370, 152, 23);
+        EmailPj.setEditable(false);
+        EmailPj.setName("EmailPj"); // NOI18N
+        FormInput.add(EmailPj);
+        EmailPj.setBounds(720, 340, 150, 23);
 
         BtnPerusahaan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/190.png"))); // NOI18N
         BtnPerusahaan.setMnemonic('1');
@@ -4043,17 +4043,17 @@ public class DlgPasien extends javax.swing.JDialog {
             }
         });
         FormInput.add(chkTNI);
-        chkTNI.setBounds(10, 410, 95, 23);
+        chkTNI.setBounds(10, 400, 95, 23);
 
         LabelGolonganTNI.setText("Golongan :");
         LabelGolonganTNI.setName("LabelGolonganTNI"); // NOI18N
         FormInput.add(LabelGolonganTNI);
-        LabelGolonganTNI.setBounds(10, 430, 103, 23);
+        LabelGolonganTNI.setBounds(10, 420, 103, 23);
 
         nmgolongantni.setEditable(false);
         nmgolongantni.setName("nmgolongantni"); // NOI18N
         FormInput.add(nmgolongantni);
-        nmgolongantni.setBounds(120, 430, 250, 23);
+        nmgolongantni.setBounds(120, 420, 250, 23);
 
         BtnGolonganTNI.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/190.png"))); // NOI18N
         BtnGolonganTNI.setMnemonic('1');
@@ -4066,7 +4066,7 @@ public class DlgPasien extends javax.swing.JDialog {
             }
         });
         FormInput.add(BtnGolonganTNI);
-        BtnGolonganTNI.setBounds(370, 430, 28, 23);
+        BtnGolonganTNI.setBounds(370, 420, 28, 23);
 
         BtnSatuanTNI.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/190.png"))); // NOI18N
         BtnSatuanTNI.setMnemonic('1');
@@ -4079,27 +4079,27 @@ public class DlgPasien extends javax.swing.JDialog {
             }
         });
         FormInput.add(BtnSatuanTNI);
-        BtnSatuanTNI.setBounds(370, 460, 28, 23);
+        BtnSatuanTNI.setBounds(370, 450, 28, 23);
 
         nmsatuantni.setEditable(false);
         nmsatuantni.setName("nmsatuantni"); // NOI18N
         FormInput.add(nmsatuantni);
-        nmsatuantni.setBounds(120, 460, 250, 23);
+        nmsatuantni.setBounds(120, 450, 250, 23);
 
         LabelSatuanTNI.setText("Kesatuan :");
         LabelSatuanTNI.setName("LabelSatuanTNI"); // NOI18N
         FormInput.add(LabelSatuanTNI);
-        LabelSatuanTNI.setBounds(10, 460, 103, 23);
+        LabelSatuanTNI.setBounds(10, 450, 103, 23);
 
         LabelPangkatTNI.setText("Pangkat :");
         LabelPangkatTNI.setName("LabelPangkatTNI"); // NOI18N
         FormInput.add(LabelPangkatTNI);
-        LabelPangkatTNI.setBounds(10, 490, 103, 23);
+        LabelPangkatTNI.setBounds(10, 480, 103, 23);
 
         nmpangkattni.setEditable(false);
         nmpangkattni.setName("nmpangkattni"); // NOI18N
         FormInput.add(nmpangkattni);
-        nmpangkattni.setBounds(120, 490, 250, 23);
+        nmpangkattni.setBounds(120, 480, 250, 23);
 
         BtnPangkatTNI.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/190.png"))); // NOI18N
         BtnPangkatTNI.setMnemonic('1');
@@ -4112,17 +4112,17 @@ public class DlgPasien extends javax.swing.JDialog {
             }
         });
         FormInput.add(BtnPangkatTNI);
-        BtnPangkatTNI.setBounds(370, 490, 28, 23);
+        BtnPangkatTNI.setBounds(370, 480, 28, 23);
 
         LabelJabatanTNI.setText("Jabatan :");
         LabelJabatanTNI.setName("LabelJabatanTNI"); // NOI18N
         FormInput.add(LabelJabatanTNI);
-        LabelJabatanTNI.setBounds(10, 520, 103, 23);
+        LabelJabatanTNI.setBounds(10, 510, 103, 23);
 
         nmjabatantni.setEditable(false);
         nmjabatantni.setName("nmjabatantni"); // NOI18N
         FormInput.add(nmjabatantni);
-        nmjabatantni.setBounds(120, 520, 250, 23);
+        nmjabatantni.setBounds(120, 510, 250, 23);
 
         BtnJabatanTNI.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/190.png"))); // NOI18N
         BtnJabatanTNI.setMnemonic('1');
@@ -4135,7 +4135,7 @@ public class DlgPasien extends javax.swing.JDialog {
             }
         });
         FormInput.add(BtnJabatanTNI);
-        BtnJabatanTNI.setBounds(370, 520, 28, 23);
+        BtnJabatanTNI.setBounds(370, 510, 28, 23);
 
         chkPolri.setText("Anggota POLRI :");
         chkPolri.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -4147,17 +4147,17 @@ public class DlgPasien extends javax.swing.JDialog {
             }
         });
         FormInput.add(chkPolri);
-        chkPolri.setBounds(430, 410, 130, 23);
+        chkPolri.setBounds(430, 400, 130, 23);
 
         LabelGolonganPolri.setText("Golongan :");
         LabelGolonganPolri.setName("LabelGolonganPolri"); // NOI18N
         FormInput.add(LabelGolonganPolri);
-        LabelGolonganPolri.setBounds(440, 430, 133, 23);
+        LabelGolonganPolri.setBounds(440, 420, 133, 23);
 
         nmgolonganpolri.setEditable(false);
         nmgolonganpolri.setName("nmgolonganpolri"); // NOI18N
         FormInput.add(nmgolonganpolri);
-        nmgolonganpolri.setBounds(580, 430, 273, 23);
+        nmgolonganpolri.setBounds(580, 420, 273, 23);
 
         BtnGolonganPolri.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/190.png"))); // NOI18N
         BtnGolonganPolri.setMnemonic('1');
@@ -4170,7 +4170,7 @@ public class DlgPasien extends javax.swing.JDialog {
             }
         });
         FormInput.add(BtnGolonganPolri);
-        BtnGolonganPolri.setBounds(850, 430, 28, 23);
+        BtnGolonganPolri.setBounds(850, 420, 28, 23);
 
         BtnSatuanPolri.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/190.png"))); // NOI18N
         BtnSatuanPolri.setMnemonic('1');
@@ -4183,27 +4183,27 @@ public class DlgPasien extends javax.swing.JDialog {
             }
         });
         FormInput.add(BtnSatuanPolri);
-        BtnSatuanPolri.setBounds(850, 460, 28, 23);
+        BtnSatuanPolri.setBounds(850, 450, 28, 23);
 
         nmsatuanpolri.setEditable(false);
         nmsatuanpolri.setName("nmsatuanpolri"); // NOI18N
         FormInput.add(nmsatuanpolri);
-        nmsatuanpolri.setBounds(580, 460, 273, 23);
+        nmsatuanpolri.setBounds(580, 450, 273, 23);
 
         LabelSatuanPolri.setText("Kesatuan :");
         LabelSatuanPolri.setName("LabelSatuanPolri"); // NOI18N
         FormInput.add(LabelSatuanPolri);
-        LabelSatuanPolri.setBounds(440, 460, 133, 23);
+        LabelSatuanPolri.setBounds(440, 450, 133, 23);
 
         LabelPangkatPolri.setText("Pangkat :");
         LabelPangkatPolri.setName("LabelPangkatPolri"); // NOI18N
         FormInput.add(LabelPangkatPolri);
-        LabelPangkatPolri.setBounds(440, 490, 133, 23);
+        LabelPangkatPolri.setBounds(440, 480, 133, 23);
 
         nmpangkatpolri.setEditable(false);
         nmpangkatpolri.setName("nmpangkatpolri"); // NOI18N
         FormInput.add(nmpangkatpolri);
-        nmpangkatpolri.setBounds(580, 490, 273, 23);
+        nmpangkatpolri.setBounds(580, 480, 273, 23);
 
         BtnPangkatPolri.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/190.png"))); // NOI18N
         BtnPangkatPolri.setMnemonic('1');
@@ -4216,7 +4216,7 @@ public class DlgPasien extends javax.swing.JDialog {
             }
         });
         FormInput.add(BtnPangkatPolri);
-        BtnPangkatPolri.setBounds(850, 490, 28, 23);
+        BtnPangkatPolri.setBounds(850, 480, 28, 23);
 
         BtnJabatanPolri.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/190.png"))); // NOI18N
         BtnJabatanPolri.setMnemonic('1');
@@ -4229,17 +4229,17 @@ public class DlgPasien extends javax.swing.JDialog {
             }
         });
         FormInput.add(BtnJabatanPolri);
-        BtnJabatanPolri.setBounds(850, 520, 28, 23);
+        BtnJabatanPolri.setBounds(850, 510, 28, 23);
 
         nmjabatanpolri.setEditable(false);
         nmjabatanpolri.setName("nmjabatanpolri"); // NOI18N
         FormInput.add(nmjabatanpolri);
-        nmjabatanpolri.setBounds(580, 520, 273, 23);
+        nmjabatanpolri.setBounds(580, 510, 273, 23);
 
         LabelJabatanPolri.setText("Jabatan :");
         LabelJabatanPolri.setName("LabelJabatanPolri"); // NOI18N
         FormInput.add(LabelJabatanPolri);
-        LabelJabatanPolri.setBounds(440, 520, 133, 23);
+        LabelJabatanPolri.setBounds(440, 510, 133, 23);
 
         BtnPropinsi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/190.png"))); // NOI18N
         BtnPropinsi.setMnemonic('4');
@@ -4352,7 +4352,7 @@ public class DlgPasien extends javax.swing.JDialog {
         jLabel40.setText("NIP/NRP :");
         jLabel40.setName("jLabel40"); // NOI18N
         FormInput.add(jLabel40);
-        jLabel40.setBounds(680, 370, 70, 23);
+        jLabel40.setBounds(670, 370, 60, 23);
 
         NIP.setHighlighter(null);
         NIP.setName("NIP"); // NOI18N
@@ -4362,7 +4362,7 @@ public class DlgPasien extends javax.swing.JDialog {
             }
         });
         FormInput.add(NIP);
-        NIP.setBounds(750, 370, 120, 23);
+        NIP.setBounds(730, 370, 140, 23);
 
         ChkAlamatPJ.setBorder(null);
         ChkAlamatPJ.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -4378,7 +4378,6 @@ public class DlgPasien extends javax.swing.JDialog {
         ChkAlamatPJ.setBounds(845, 252, 28, 23);
 
         CmbKeluarga.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "AYAH", "IBU", "ISTRI", "SUAMI", "SAUDARA", "ANAK", "DIRI SENDIRI", "LAIN-LAIN" }));
-        CmbKeluarga.setSelectedIndex(6);
         CmbKeluarga.setName("CmbKeluarga"); // NOI18N
         CmbKeluarga.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -4388,23 +4387,25 @@ public class DlgPasien extends javax.swing.JDialog {
         FormInput.add(CmbKeluarga);
         CmbKeluarga.setBounds(102, 192, 290, 23);
 
+        nmperusahaan1.setEditable(false);
+        nmperusahaan1.setName("nmperusahaan1"); // NOI18N
+        FormInput.add(nmperusahaan1);
+        nmperusahaan1.setBounds(500, 370, 152, 23);
+
+        NoTelpPj.setEditable(false);
         NoTelpPj.setName("NoTelpPj"); // NOI18N
         FormInput.add(NoTelpPj);
-        NoTelpPj.setBounds(740, 340, 130, 24);
+        NoTelpPj.setBounds(500, 340, 150, 23);
 
-        EmailPj.setName("EmailPj"); // NOI18N
-        FormInput.add(EmailPj);
-        EmailPj.setBounds(500, 340, 150, 24);
-
-        jLabel43.setText("Alamat P.J. :");
+        jLabel43.setText("Instansi Pasien :");
         jLabel43.setName("jLabel43"); // NOI18N
         FormInput.add(jLabel43);
-        jLabel43.setBounds(402, 252, 90, 23);
+        jLabel43.setBounds(410, 370, 80, 23);
 
-        jLabel44.setText("Email P.J. :");
+        jLabel44.setText("No. Telp/HP PJ :");
         jLabel44.setName("jLabel44"); // NOI18N
         FormInput.add(jLabel44);
-        jLabel44.setBounds(400, 340, 90, 23);
+        jLabel44.setBounds(380, 340, 110, 23);
 
         Scroll1.setViewportView(FormInput);
 
@@ -4422,7 +4423,6 @@ public class DlgPasien extends javax.swing.JDialog {
         Scroll.setName("Scroll"); // NOI18N
         Scroll.setOpaque(true);
 
-        tbPasien.setAutoCreateRowSorter(true);
         tbPasien.setToolTipText("Silahkan klik untuk memilih data yang mau diedit ataupun dihapus");
         tbPasien.setComponentPopupMenu(jPopupMenu1);
         tbPasien.setName("tbPasien"); // NOI18N
@@ -4455,7 +4455,6 @@ public class DlgPasien extends javax.swing.JDialog {
         Scroll2.setName("Scroll2"); // NOI18N
         Scroll2.setOpaque(true);
 
-        tbPasien2.setAutoCreateRowSorter(true);
         tbPasien2.setToolTipText("Silahkan klik untuk memilih data yang mau diedit ataupun dihapus");
         tbPasien2.setComponentPopupMenu(jPopupMenu1);
         tbPasien2.setName("tbPasien2"); // NOI18N
@@ -4488,7 +4487,6 @@ public class DlgPasien extends javax.swing.JDialog {
         Scroll3.setName("Scroll3"); // NOI18N
         Scroll3.setOpaque(true);
 
-        tbPasien3.setAutoCreateRowSorter(true);
         tbPasien3.setToolTipText("Silahkan klik untuk memilih data yang mau diedit ataupun dihapus");
         tbPasien3.setComponentPopupMenu(jPopupMenu1);
         tbPasien3.setName("tbPasien3"); // NOI18N
@@ -4754,8 +4752,8 @@ private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
             Valid.textKosong(nmcacat,"Cacat Fisik");
         }else if(nmbahasa.getText().trim().equals("")){
             Valid.textKosong(nmbahasa,"Bahasa");
-        }else if(nmperusahaan.getText().trim().equals("")){
-            Valid.textKosong(nmperusahaan,"Perusahaan/Instansi");
+        }else if(EmailPj.getText().trim().equals("")){
+            Valid.textKosong(EmailPj,"Perusahaan/Instansi");
         }else if((chkTNI.isSelected()==true)&&nmgolongantni.getText().trim().equals("")){
             Valid.textKosong(nmgolongantni,"Golongan TNI");
         }else if((chkTNI.isSelected()==true)&&nmsatuantni.getText().trim().equals("")){
@@ -5124,8 +5122,8 @@ private void BtnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             Valid.textKosong(nmbahasa,"Bahasa");
         }else if(nmcacat.getText().trim().equals("")){
             Valid.textKosong(nmcacat,"Cacat Fisik");
-        }else if(nmperusahaan.getText().trim().equals("")){
-            Valid.textKosong(nmperusahaan,"Perusahaan/Instansi");
+        }else if(EmailPj.getText().trim().equals("")){
+            Valid.textKosong(EmailPj,"Perusahaan/Instansi");
         }else if((chkTNI.isSelected()==true)&&nmgolongantni.getText().trim().equals("")){
             Valid.textKosong(nmgolongantni,"Golongan TNI");
         }else if((chkTNI.isSelected()==true)&&nmsatuantni.getText().trim().equals("")){
@@ -5244,7 +5242,7 @@ private void BtnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     tbPasien.setValueAt(kdbahasa.getText(),tbPasien.getSelectedRow(), 26);
                     tbPasien.setValueAt(nmbahasa.getText(),tbPasien.getSelectedRow(), 27);
                     tbPasien.setValueAt(kdperusahaan.getText(),tbPasien.getSelectedRow(), 28);
-                    tbPasien.setValueAt(nmperusahaan.getText(),tbPasien.getSelectedRow(), 29);
+                    tbPasien.setValueAt(EmailPj.getText(),tbPasien.getSelectedRow(), 29);
                     tbPasien.setValueAt(NIP.getText(),tbPasien.getSelectedRow(), 30);
                     tbPasien.setValueAt(EMail.getText(),tbPasien.getSelectedRow(), 31);
                     tbPasien.setValueAt(kdcacat.getText(),tbPasien.getSelectedRow(), 32);
@@ -6918,8 +6916,8 @@ private void KabupatenMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:eve
             TNo.setBackground(new Color(245,250,240));  
 //            autoNomor();
         }else if(ChkRM.isSelected()==false){
-            TNo.setEditable(true);
-            TNo.setBackground(new Color(250,255,245));
+//            TNo.setEditable(false);
+//            TNo.setBackground(new Color(250,255,245));
         }
     }//GEN-LAST:event_ChkRMItemStateChanged
 
@@ -8988,7 +8986,7 @@ private void KabupatenMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:eve
     private widget.TextBox nmjabatantni;
     private widget.TextBox nmpangkatpolri;
     private widget.TextBox nmpangkattni;
-    private widget.TextBox nmperusahaan;
+    private widget.TextBox nmperusahaan1;
     private widget.TextBox nmpnj;
     private widget.TextBox nmsatuanpolri;
     private widget.TextBox nmsatuantni;
@@ -9666,7 +9664,7 @@ private void KabupatenMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:eve
         kdbahasa.setText("");
         nmbahasa.setText("");
         kdperusahaan.setText("");
-        nmperusahaan.setText("");
+        EmailPj.setText("");
         kdgolongantni.setText("");
         nmgolongantni.setText("");
         kdsatuantni.setText("");
@@ -9758,7 +9756,7 @@ private void KabupatenMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:eve
                 kdbahasa.setText(tbPasien.getValueAt(tbPasien.getSelectedRow(),26).toString());
                 nmbahasa.setText(tbPasien.getValueAt(tbPasien.getSelectedRow(),27).toString());
                 kdperusahaan.setText(tbPasien.getValueAt(tbPasien.getSelectedRow(),28).toString());
-                nmperusahaan.setText(tbPasien.getValueAt(tbPasien.getSelectedRow(),29).toString());
+                EmailPj.setText(tbPasien.getValueAt(tbPasien.getSelectedRow(),29).toString());
                   NIP.setText(tbPasien.getValueAt(tbPasien.getSelectedRow(),30).toString());
                   EMail.setText(tbPasien.getValueAt(tbPasien.getSelectedRow(),31).toString());
                  kdcacat.setText(tbPasien.getValueAt(tbPasien.getSelectedRow(),32).toString());
@@ -9887,7 +9885,7 @@ private void KabupatenMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:eve
             kdbahasa.setText(tbPasien2.getValueAt(tbPasien2.getSelectedRow(),26).toString());
             nmbahasa.setText(tbPasien2.getValueAt(tbPasien2.getSelectedRow(),27).toString());
             kdperusahaan.setText(tbPasien2.getValueAt(tbPasien2.getSelectedRow(),28).toString());
-            nmperusahaan.setText(tbPasien2.getValueAt(tbPasien2.getSelectedRow(),29).toString());
+            EmailPj.setText(tbPasien2.getValueAt(tbPasien2.getSelectedRow(),29).toString());
             kdgolongantni.setText(tbPasien2.getValueAt(tbPasien2.getSelectedRow(),30).toString());
             nmgolongantni.setText(tbPasien2.getValueAt(tbPasien2.getSelectedRow(),31).toString());
             kdsatuantni.setText(tbPasien2.getValueAt(tbPasien2.getSelectedRow(),32).toString());
@@ -9984,7 +9982,7 @@ private void KabupatenMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:eve
             kdbahasa.setText(tbPasien3.getValueAt(tbPasien3.getSelectedRow(),26).toString());
             nmbahasa.setText(tbPasien3.getValueAt(tbPasien3.getSelectedRow(),27).toString());
             kdperusahaan.setText(tbPasien3.getValueAt(tbPasien3.getSelectedRow(),28).toString());
-            nmperusahaan.setText(tbPasien3.getValueAt(tbPasien3.getSelectedRow(),29).toString());
+            EmailPj.setText(tbPasien3.getValueAt(tbPasien3.getSelectedRow(),29).toString());
             kdgolonganpolri.setText(tbPasien3.getValueAt(tbPasien3.getSelectedRow(),30).toString());
             nmgolonganpolri.setText(tbPasien3.getValueAt(tbPasien3.getSelectedRow(),31).toString());
             kdsatuanpolri.setText(tbPasien3.getValueAt(tbPasien3.getSelectedRow(),32).toString());

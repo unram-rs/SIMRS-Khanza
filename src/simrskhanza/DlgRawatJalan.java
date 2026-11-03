@@ -2013,8 +2013,9 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
         TabRawatTindakanDokter.addTab("Tindakan Dilakukan", Scroll);
 
         internalFrame2.add(TabRawatTindakanDokter, java.awt.BorderLayout.CENTER);
+        internalFrame2.disable();
 
-        TabRawat.addTab("Penanganan Dokter", internalFrame2);
+//        TabRawat.addTab("Penanganan Dokter", internalFrame2);
 
         internalFrame3.setBorder(null);
         internalFrame3.setName("internalFrame3"); 
@@ -2107,7 +2108,7 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
 
         internalFrame3.add(TabRawatTindakanPetugas, java.awt.BorderLayout.CENTER);
 
-        TabRawat.addTab("Penanganan Petugas", internalFrame3);
+//        TabRawat.addTab("Penanganan Petugas", internalFrame3);
 
         internalFrame4.setBorder(null);
         internalFrame4.setName("internalFrame4"); 
@@ -12973,7 +12974,7 @@ private void BtnEditKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     
     public void emptTeks(){
         BtnBatalActionPerformed(null);
-        TabRawat.setSelectedIndex(3);
+        TabRawat.setSelectedIndex(1);
     }
     
     private void initRawatJalan(){
