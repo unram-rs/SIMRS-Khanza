@@ -2770,7 +2770,7 @@
                           <Properties>
                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                               <StringArray count="1">
-                                <StringItem index="0" value="03-11-2026"/>
+                                <StringItem index="0" value="06-11-2026"/>
                               </StringArray>
                             </Property>
                             <Property name="displayFormat" type="java.lang.String" value="dd-MM-yyyy"/>
@@ -2989,7 +2989,7 @@
                           <Properties>
                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                               <StringArray count="1">
-                                <StringItem index="0" value="03-11-2026"/>
+                                <StringItem index="0" value="06-11-2026"/>
                               </StringArray>
                             </Property>
                             <Property name="displayFormat" type="java.lang.String" value="dd-MM-yyyy"/>
@@ -3702,7 +3702,6 @@
                         </Component>
                         <Component class="widget.TextBox" name="EmailPj">
                           <Properties>
-                            <Property name="editable" type="boolean" value="false"/>
                             <Property name="name" type="java.lang.String" value="EmailPj" noResource="true"/>
                           </Properties>
                           <Constraints>
@@ -4305,10 +4304,10 @@
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Component class="widget.TextBox" name="nmperusahaan1">
+                        <Component class="widget.TextBox" name="nmperusahaan">
                           <Properties>
                             <Property name="editable" type="boolean" value="false"/>
-                            <Property name="name" type="java.lang.String" value="nmperusahaan1" noResource="true"/>
+                            <Property name="name" type="java.lang.String" value="nmperusahaan" noResource="true"/>
                           </Properties>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -4318,7 +4317,6 @@
                         </Component>
                         <Component class="widget.TextBox" name="NoTelpPj">
                           <Properties>
-                            <Property name="editable" type="boolean" value="false"/>
                             <Property name="name" type="java.lang.String" value="NoTelpPj" noResource="true"/>
                           </Properties>
                           <Constraints>
